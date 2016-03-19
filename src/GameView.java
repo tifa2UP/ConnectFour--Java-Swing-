@@ -14,6 +14,13 @@ import javax.swing.*;
 public class GameView extends JFrame{
 	
 	public static void main(String[] args){
-		
+		new GameView();
+	}
+	
+	public GameView(){
+		this.setSize(600,600);
+		this.setLocationRelativeTo(null);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 	}
 }

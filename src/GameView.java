@@ -4,6 +4,11 @@
  */
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -24,32 +29,50 @@ public class GameView extends JFrame{
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
 		this.setResizable(false);
-		
+		this.setTitle("2 Player Connect Four");
 		StartPanel startPanel = new StartPanel();
 		
 		this.setLayout(null);	
 		
 		this.add(startPanel);
 		
-		//Compute hidden height and width in the frame
+		//Compute hidden height and width of the frame
 		int hiddenHeight = getInsets().top + getInsets().bottom;
 		int hiddenWidth = getInsets().left + getInsets().right;
 		
 		//Center the start panel in the frame
 		startPanel.setLocation((this.getWidth() - hiddenWidth - startPanel.getWidth())/2, (this.getHeight() - hiddenHeight - startPanel.getHeight())/2);
 		
+
 		
 		this.setVisible(true);
 	}
 	
 	/**
 	 * This is an inner class resembling the JPanel that contains the start button.
-	 * @author Momo
+	 * @author Mohammad
 	 */
 	private class StartPanel extends JPanel{
 		public StartPanel(){
 			JButton startButton = new JButton("Start Game");
 			this.add(startButton);
+			
+			//Creating the Icon for the game and added it to the StartPanel
+			BufferedImage gameIcon = null;
+			try{
+				gameIcon = ImageIO.read(new File("img/connect4_logo.png"));
+			}
+			catch(IOException ioEx) {
+				System.out.println("Problem loading icon");
+			}
+			//Resizing the Image to fit properly in the game window
+			Image resized = gameIcon.getScaledInstance(360, 108, Image.SCALE_SMOOTH);
+			ImageIcon icon = new ImageIcon(resized);
+			JLabel iconLabel = new JLabel();
+			//Containing the image within a label to add to the panel
+			iconLabel.setIcon(icon);
+			
+			this.add(iconLabel);
 			this.setSize(this.getPreferredSize());
 		}
 	}

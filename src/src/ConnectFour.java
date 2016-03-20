@@ -1,4 +1,4 @@
-package src.src;
+package src;
 
 /**
  * Created by Abdellatif.

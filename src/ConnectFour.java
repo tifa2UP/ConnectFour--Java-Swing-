@@ -35,11 +35,11 @@ public class ConnectFour {
 
     /**
      * inserts a chip at a given column
-     *
      * @param columnPosition the position the user is inserting the chip at
+     *
      */
-    public void insertChip(int columnPosition) {
-
+    public void insertChip(int columnPosition, int player) {
+//        Chip
     }
 
 

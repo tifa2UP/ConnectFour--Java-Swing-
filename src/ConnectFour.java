@@ -1,7 +1,7 @@
 package src;
 
 /**
- * Created by Abdellatif on 3/19/2016.
+ * Created by Abdellatif.
  */
 
 /**
@@ -9,11 +9,19 @@ package src;
  */
 public class ConnectFour {
 
-    int[][] structure;
-    int[] positionForinsert;
+    //the structure of the board
+    Chip[][] structure;
+    //the available position of the next insert (since the chip has to be above another one unless the coloumn is empty)
+    int[] positionForInsert;
 
     public ConnectFour(int boardSize) {
-        structure = new int[boardSize][boardSize];
+        //create a new empty board of Chips
+        structure = new Chip[boardSize][boardSize];
+        positionForInsert = new int[boardSize];
+        for (int i = 0; i < boardSize; i++) {
+            positionForInsert[i] = 0;
+        }
+
     }
 
 

@@ -1,15 +1,14 @@
-/**
+package src; /**
  * Created by Abdellatif on 3/19/2016.
  * Functionality added by Mohammad on 3/19/2016
  */
 
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-import javax.swing.*;
 
 /**
  * Displays the user interface for the game.
@@ -18,34 +17,34 @@ import javax.swing.*;
  */
 public class GameView extends JFrame{
 	
-	public static void main(String[] args){
-		new GameView();
-	}
 	/**
 	 * Constructs the GUI, putting together all panels and buttons.
 	 */
 	public GameView(){
 		this.setSize(600,600);
 		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle("2 Player Connect Four");
 		StartPanel startPanel = new StartPanel();
-		
-		this.setLayout(null);	
-		
+
+		this.setLayout(null);
+
 		this.add(startPanel);
-		
+
 		//Compute hidden height and width of the frame
 		int hiddenHeight = getInsets().top + getInsets().bottom;
 		int hiddenWidth = getInsets().left + getInsets().right;
-		
+
 		//Center the start panel in the frame
 		startPanel.setLocation((this.getWidth() - hiddenWidth - startPanel.getWidth())/2, (this.getHeight() - hiddenHeight - startPanel.getHeight())/2);
-		
 
-		
+
 		this.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		new GameView();
 	}
 	
 	/**

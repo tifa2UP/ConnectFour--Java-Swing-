@@ -53,8 +53,9 @@ public class GameView extends JFrame{
 	 */
 	private class StartPanel extends JPanel{
 		public StartPanel(){
-			JButton startButton = new JButton("Start Game");
-			this.add(startButton);
+			//Sets the layout of the panel to a BoxLayout allowing for better component alignment
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			
 			
 			//Creating the Icon for the game and added it to the StartPanel
 			BufferedImage gameIcon = null;
@@ -65,13 +66,20 @@ public class GameView extends JFrame{
 				System.out.println("Problem loading icon");
 			}
 			//Resizing the Image to fit properly in the game window
-			Image resized = gameIcon.getScaledInstance(360, 108, Image.SCALE_SMOOTH);
+			Image resized = gameIcon.getScaledInstance(540, 162, Image.SCALE_SMOOTH);
 			ImageIcon icon = new ImageIcon(resized);
 			JLabel iconLabel = new JLabel();
 			//Containing the image within a label to add to the panel
 			iconLabel.setIcon(icon);
-			
+			iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			this.add(iconLabel);
+			
+			//Creating the Start Button for the game
+			JButton startButton = new JButton("Start Game");
+			this.add(startButton);
+			startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			
+			//Makes the panel be the exact size to hold its components
 			this.setSize(this.getPreferredSize());
 		}
 	}

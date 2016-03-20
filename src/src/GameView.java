@@ -79,6 +79,10 @@ public class GameView extends JFrame{
 			this.add(startButton);
 			startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 			
+			JLabel bottomText = new JLabel("© Mohammad Sharif & Abdellatif Abdellfatah");
+			bottomText.setAlignmentX(Component.CENTER_ALIGNMENT);
+			this.add(bottomText);
+			
 			//Makes the panel be the exact size to hold its components
 			this.setSize(this.getPreferredSize());
 		}

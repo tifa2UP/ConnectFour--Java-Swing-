@@ -1,4 +1,4 @@
-package src;
+package CS151.HW3;
 
 /**
  * Created by Abdellatif.

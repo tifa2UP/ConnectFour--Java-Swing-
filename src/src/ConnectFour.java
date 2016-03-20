@@ -1,4 +1,4 @@
-package src;
+package src.src;
 
 /**
  * Created by Abdellatif.
@@ -35,7 +35,17 @@ public class ConnectFour {
      *
      * @return true if one of the players win
      */
-    private boolean didWin() {
+    private boolean didWin(int x, int y, Chip chip) {
+        //counts the number of adjacent chips
+        int counter = 0;
+        //check horizontally
+        if (x == 0) {
+            //check only right side
+            for (int i = 0; i < structure[0].length; i++) {
+//                if ()
+            }
+        }
+
         return false;
     }
 
@@ -54,7 +64,6 @@ public class ConnectFour {
         //increment the position for insert at that given column
         positionForInsert[columnPosition] = positionForInsert[columnPosition]++;
     }
-
 
     }
 

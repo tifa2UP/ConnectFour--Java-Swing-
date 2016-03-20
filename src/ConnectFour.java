@@ -39,7 +39,7 @@ public class ConnectFour {
      *
      */
     public void insertChip(int columnPosition, int player) {
-//        Chip
+
     }
 
 

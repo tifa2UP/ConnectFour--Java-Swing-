@@ -69,9 +69,36 @@ public class ConnectFour {
 //            counter = 0;
 //
 //        }
-        
+
+        int counter = 0;
+        //check horizontally
+        for (int i = 0; i < structure.length; i++) {
+            if (chip.getIdentifier() == structure[i][y].getIdentifier()) {
+                counter++;
+                if (counter >= 4) {
+                    return true;
+                }
+            } else {
+                counter = 0;
+            }
+        }
+        //check vertically
+        counter = 0;
+        for (int i = 0; i < structure.length; i++) {
+            if (chip.getIdentifier() == structure[x][i].getIdentifier()) {
+                counter++;
+                if (counter >= 4) {
+                    return true;
+                }
+            } else {
+                counter = 0;
+            }
+
+        }
+        //TODO: implement the two horizontal orientations
         return false;
     }
+
 
     /**
      * inserts a chip at a given column
@@ -89,7 +116,7 @@ public class ConnectFour {
         positionForInsert[columnPosition] = positionForInsert[columnPosition]++;
     }
 
-    }
+}
 
 
 

@@ -12,8 +12,8 @@ public class TerminalTester {
         Player mohammad = new Player("Mohammad", chip2);
 
         ConnectFour board = new ConnectFour(8, abdellatif, mohammad);
-        board.insertChip(1, abdellatif);
-        board.insertChip(1, mohammad);
+        board.insertChip(0, abdellatif);
+        board.insertChip(0, mohammad);
         board.insertChip(2, abdellatif);
         board.insertChip(2, mohammad);
         board.insertChip(1, abdellatif);

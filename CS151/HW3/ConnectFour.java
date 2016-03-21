@@ -66,7 +66,7 @@ public class ConnectFour {
         return false;
     }
 
-    /** test2
+    /**
      * prints out the board in the terminal (for debugging purposes)
      */
     public void printBoard() {
@@ -96,7 +96,7 @@ public class ConnectFour {
         //the second part is simply the column in that the player puts the chip in
         structure[columnPosition][(positionForInsert[columnPosition])] = newChip;
         //increment the position for insert at that given column
-        positionForInsert[columnPosition] = positionForInsert[columnPosition]++;
+        positionForInsert[columnPosition] = positionForInsert[columnPosition] + 1;
     }
 
 }

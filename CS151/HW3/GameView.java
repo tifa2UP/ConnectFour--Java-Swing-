@@ -6,6 +6,8 @@ package CS151.HW3; /**
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,22 +28,29 @@ public class GameView extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle("2 Player Connect Four");
-		StartPanel startPanel = new StartPanel();
-
-
-		// TESTING 
+		
+		IconPanel iconPanel = new IconPanel();
+		ButtonPanel buttonPanel = new ButtonPanel();
+		TextPanel textPanel = new TextPanel();
 
 		this.setLayout(null);
 
-		this.add(startPanel);
+		this.add(iconPanel);
+		this.add(buttonPanel);
+		this.add(textPanel);
 
 		//Compute hidden height and width of the frame
 		int hiddenHeight = getInsets().top + getInsets().bottom;
 		int hiddenWidth = getInsets().left + getInsets().right;
 
 		//Center the start panel in the frame
-		startPanel.setLocation((this.getWidth() - hiddenWidth - startPanel.getWidth())/2, (this.getHeight() - hiddenHeight - startPanel.getHeight())/2);
+		iconPanel.setLocation((this.getWidth() - hiddenWidth - iconPanel.getWidth())/2, (this.getHeight() - hiddenHeight - iconPanel.getHeight())/2);
 
+		//Put the button underneath the game icon, with a decent amount of space
+		buttonPanel.setLocation((this.getWidth() - hiddenWidth - buttonPanel.getWidth())/2, (this.getHeight() - hiddenHeight - buttonPanel.getHeight())/2 + this.getHeight()/4);
+
+		//Put the copyright text at the bottom of the window
+		textPanel.setLocation((this.getWidth() - hiddenWidth - textPanel.getWidth())/2, (this.getHeight() - hiddenHeight - textPanel.getHeight())/2 + this.getHeight()/3);
 
 		this.setVisible(true);
 	}
@@ -54,10 +63,10 @@ public class GameView extends JFrame{
 	 * This is an inner class resembling the JPanel that contains the start button.
 	 * @author Mohammad
 	 */
-	private class StartPanel extends JPanel{
-		public StartPanel(){
+	private class IconPanel extends JPanel{
+		public IconPanel(){
 			//Sets the layout of the panel to a BoxLayout allowing for better component alignment
-			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 			
 			
 			//Creating the Icon for the game and added it to the StartPanel
@@ -68,6 +77,7 @@ public class GameView extends JFrame{
 			catch(IOException ioEx) {
 				System.out.println("Problem loading icon");
 			}
+
 			//Resizing the Image to fit properly in the game window
 			Image resized = gameIcon.getScaledInstance(540, 162, Image.SCALE_SMOOTH);
 			ImageIcon icon = new ImageIcon(resized);
@@ -76,18 +86,72 @@ public class GameView extends JFrame{
 			iconLabel.setIcon(icon);
 			iconLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 			this.add(iconLabel);
-			
-			//Creating the Start Button for the game
-			JButton startButton = new JButton("Start Game");
-			this.add(startButton);
-			startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
-			JLabel bottomText = new JLabel("© Mohammad Sharif & Abdellatif Abdellfatah");
-			bottomText.setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.add(bottomText);
-			
+
 			//Makes the panel be the exact size to hold its components
 			this.setSize(this.getPreferredSize());
 		}
 	}
+
+	/**
+	 * This class contains the button that will be responsible for starting the game
+	 */
+	private class ButtonPanel extends JPanel{
+		JButton startButton;
+		public ButtonPanel(){
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			//Creating the Start Button for the game
+			startButton = new JButton("Start Game");
+			this.add(startButton);
+			startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+			//Create a listener for the start button
+			ListenForButton listenForButton = new ListenForButton();
+			startButton.addActionListener(listenForButton);
+
+			//Makes the panel be the exact size to hold its components
+			this.setSize(this.getPreferredSize());
+
+		}
+
+		/**
+		 * This class will monitor any clicks carried out on the start button,
+		 * upon the click the frame will disappear and the game frame will open.
+		 */
+		private class ListenForButton implements ActionListener{
+			public ListenForButton(){
+
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(e.getSource() == startButton){
+					//Upon the button being clicked, the frame will switch to that of the game.
+					GameView.this.setVisible(false);
+				}
+			}
+		}
+
+
+	}
+
+	/**
+	 * This class contains the text for the bottom of the screen within a JPanel
+	 */
+	private class TextPanel extends JPanel{
+		public TextPanel(){
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			//Creating a JLabel to contain the text for the bottom of the page
+			JLabel bottomText = new JLabel("© Mohammad Sharif & Abdellatif Abdellfatah");
+			bottomText.setAlignmentX(Component.CENTER_ALIGNMENT);
+			this.add(bottomText);
+
+			//Makes the panel be the exact size to hold its components
+			this.setSize(this.getPreferredSize());
+
+		}
+	}
+
+
 }

@@ -28,16 +28,20 @@ public class GameView extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		this.setTitle("2 Player Connect Four");
-		
+
 		IconPanel iconPanel = new IconPanel();
 		ButtonPanel buttonPanel = new ButtonPanel();
 		TextPanel textPanel = new TextPanel();
+		GridNumber gridNumber = new GridNumber();
+		ConnectionsToWin connectionsToWin = new ConnectionsToWin();
 
 		this.setLayout(null);
 
 		this.add(iconPanel);
 		this.add(buttonPanel);
 		this.add(textPanel);
+		this.add(gridNumber);
+		this.add(connectionsToWin);
 
 		//Compute hidden height and width of the frame
 		int hiddenHeight = getInsets().top + getInsets().bottom;
@@ -51,6 +55,12 @@ public class GameView extends JFrame{
 
 		//Put the copyright text at the bottom of the window
 		textPanel.setLocation((this.getWidth() - hiddenWidth - textPanel.getWidth())/2, (this.getHeight() - hiddenHeight - textPanel.getHeight())/2 + this.getHeight()/3);
+
+		//Asks user for input of what the area of the gameboard should be, located above start button
+		gridNumber.setLocation((this.getWidth() - hiddenWidth - textPanel.getWidth())/10, buttonPanel.getY() - 50 );
+
+		//Asks user for input of how many chips must connect for a player to win
+		connectionsToWin.setLocation((this.getWidth() - hiddenWidth - textPanel.getWidth()) + 20, buttonPanel.getY() - 50 );
 
 		this.setVisible(true);
 	}
@@ -128,6 +138,7 @@ public class GameView extends JFrame{
 				if(e.getSource() == startButton){
 					//Upon the button being clicked, the frame will switch to that of the game.
 					GameView.this.setVisible(false);
+					new GamePlayView();
 				}
 			}
 		}
@@ -148,6 +159,52 @@ public class GameView extends JFrame{
 			this.add(bottomText);
 
 			//Makes the panel be the exact size to hold its components
+			this.setSize(this.getPreferredSize());
+
+		}
+	}
+
+	/**
+	 * This class contains the panel holding the Text info for the user as well as taking user input
+	 * to know how many rows and columns should be in the grid. Maximum 10.
+	 */
+	private class GridNumber extends JPanel {
+		public GridNumber(){
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			JLabel title = new JLabel("How many rows/columns? ex: 6 means 6x6");
+			JTextField gridField = new JTextField(2);
+
+			//Used to keep a small text field that is meant to hold 2 digits
+			gridField.setMaximumSize(gridField.getPreferredSize());
+
+			title.setAlignmentX(Component.CENTER_ALIGNMENT);
+			gridField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+			this.add(title);
+			this.add(gridField);
+			this.setSize(this.getPreferredSize());
+
+		}
+	}
+
+	/**
+	 * This class is a panel containing the Text info for the user as well as how many chips need to connect
+	 * for someone to win. It cannot be greater than the amount of rows or columns.
+	 */
+	private class ConnectionsToWin extends JPanel {
+		public ConnectionsToWin(){
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+			JLabel title = new JLabel("How many connections to win?");
+			JTextField connectionsField = new JTextField(2);
+
+			//Used to keep a small text field that is meant to hold 2 digits
+			connectionsField.setMaximumSize(connectionsField.getPreferredSize());
+
+			title.setAlignmentX(Component.CENTER_ALIGNMENT);
+			connectionsField.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+			this.add(title);
+			this.add(connectionsField);
 			this.setSize(this.getPreferredSize());
 
 		}

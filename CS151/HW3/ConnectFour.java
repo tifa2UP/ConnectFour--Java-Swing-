@@ -95,10 +95,26 @@ public class ConnectFour {
             }
 
         }
-        //TODO: implement the two horizontal orientations
+        //TODO: implement the two diagonal orientations
         return false;
     }
 
+    /**
+     * prints out the board in the terminal (for debugging purposes)
+     */
+    public void printBoard() {
+        for (int y = structure.length - 1; y > 0; y--) {
+            for (int x = 0; x < structure.length - 1; x++) {
+                if (structure[x][y] == null) {
+                    System.out.print("-");
+                } else {
+                    System.out.print(" | " + structure[x][y].getIdentifier());
+                }
+            }
+            //create a new line after every row
+            System.out.println();
+        }
+    }
 
     /**
      * inserts a chip at a given column

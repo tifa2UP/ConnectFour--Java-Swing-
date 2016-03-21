@@ -28,6 +28,9 @@ public class GameView extends JFrame{
 		this.setTitle("2 Player Connect Four");
 		StartPanel startPanel = new StartPanel();
 
+
+		// TESTING 
+
 		this.setLayout(null);
 
 		this.add(startPanel);

@@ -66,7 +66,7 @@ public class ConnectFour {
         return false;
     }
 
-    /**
+    /** test2
      * prints out the board in the terminal (for debugging purposes)
      */
     public void printBoard() {

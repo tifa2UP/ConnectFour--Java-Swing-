@@ -10,6 +10,7 @@ package CS151.HW3;
 public class ConnectFour {
 
     //the structure of the board
+    //the first array contains the x component, the second part contains the y one
     private Chip[][] structure;
     //the available position of the next insert (since the chip has to be above another one unless the column is empty)
     private int[] positionForInsert;
@@ -36,16 +37,39 @@ public class ConnectFour {
      * @return true if one of the players win
      */
     private boolean didWin(int x, int y, Chip chip) {
-        //counts the number of adjacent chips
-        int counter = 0;
-        //check horizontally
-        if (x == 0) {
-            //check only right side
-            for (int i = 0; i < structure[0].length; i++) {
-//                if ()
-            }
-        }
-
+//        //counts the number of adjacent chips
+//        int counter = 0;
+//        //check horizontally
+//        if (x == 0) {
+//            //check only right side
+//            for (int i = 0; i < structure[0].length; i++) {
+//                if (!structure[x][y].equals(structure[i][y])){
+//                    break;
+//                }
+//                counter++;
+//            }
+//            if (counter >= 4){
+//                return true;
+//            }
+//        }
+//        //in case the chip is all the way to the right
+//        else if (x == structure[0].length - 1){
+//            counter = 0;
+//            for (int i = structure[0].length; i >= 0; i--){
+//                if (!structure[x][y].equals(structure[i][y])){
+//                    break;
+//                }
+//                counter++;
+//                if (counter >= 4){
+//                    return true;
+//                }
+//            }
+//        }
+//        else if (x != 0 && x != structure[0].length - 1){
+//            counter = 0;
+//
+//        }
+        
         return false;
     }
 
@@ -60,7 +84,7 @@ public class ConnectFour {
         //insert a new chip a given column
         //the first part of the arrays is height which is given by the number of chips that are present in that column
         //the second part is simply the column in that the player puts the chip in
-        structure[(positionForInsert[columnPosition])][columnPosition] = newChip;
+        structure[columnPosition][(positionForInsert[columnPosition])] = newChip;
         //increment the position for insert at that given column
         positionForInsert[columnPosition] = positionForInsert[columnPosition]++;
     }

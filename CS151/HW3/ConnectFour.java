@@ -37,39 +37,6 @@ public class ConnectFour {
      * @return true if one of the players win
      */
     private boolean didWin(int x, int y, Chip chip) {
-//        //counts the number of adjacent chips
-//        int counter = 0;
-//        //check horizontally
-//        if (x == 0) {
-//            //check only right side
-//            for (int i = 0; i < structure[0].length; i++) {
-//                if (!structure[x][y].equals(structure[i][y])){
-//                    break;
-//                }
-//                counter++;
-//            }
-//            if (counter >= 4){
-//                return true;
-//            }
-//        }
-//        //in case the chip is all the way to the right
-//        else if (x == structure[0].length - 1){
-//            counter = 0;
-//            for (int i = structure[0].length; i >= 0; i--){
-//                if (!structure[x][y].equals(structure[i][y])){
-//                    break;
-//                }
-//                counter++;
-//                if (counter >= 4){
-//                    return true;
-//                }
-//            }
-//        }
-//        else if (x != 0 && x != structure[0].length - 1){
-//            counter = 0;
-//
-//        }
-
         int counter = 0;
         //check horizontally
         for (int i = 0; i < structure.length; i++) {

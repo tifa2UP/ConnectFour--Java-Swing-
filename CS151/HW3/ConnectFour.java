@@ -72,7 +72,7 @@ public class ConnectFour {
         for (int y = structure.length - 1; y >= 0; y--) {
             for (int x = 0; x < structure.length ; x++) {
                 if (structure[x][y] == null) {
-                    System.out.print("-");
+                    System.out.print(" | -");
                 } else {
                     System.out.print(" | " + structure[x][y].getIdentifier());
                 }

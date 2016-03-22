@@ -1,6 +1,8 @@
 package CS151.HW3;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +15,8 @@ import javax.swing.*;
  */
 public class GameOptionView extends JFrame{
 
+    PlayerPanel player1;
+    PlayerPanel player2;
 
     public GameOptionView(){
         this.setSize(600,600);
@@ -25,9 +29,10 @@ public class GameOptionView extends JFrame{
         IconPanel gameIcon = new IconPanel();
         GridNumber gridNumber = new GridNumber();
         ConnectionsToWin connectionsToWin = new ConnectionsToWin();
-        PlayerPanel player1 = new PlayerPanel(1, "Red");
-        PlayerPanel player2 = new PlayerPanel(2, "Yellow");
+        player1 = new PlayerPanel(1, "Red");
+        player2 = new PlayerPanel(2, "Yellow");
         ColorButtonPanel colorButtonPanel = new ColorButtonPanel();
+        ButtonPanel startButton = new ButtonPanel();
 
         this.add(gameIcon);
         this.add(gridNumber);
@@ -35,6 +40,7 @@ public class GameOptionView extends JFrame{
         this.add(player1);
         this.add(player2);
         this.add(colorButtonPanel);
+        this.add(startButton);
 
         //Compute hidden height and width of the frame
         int hiddenHeight = getInsets().top + getInsets().bottom;
@@ -44,16 +50,19 @@ public class GameOptionView extends JFrame{
         gameIcon.setLocation((this.getWidth() - hiddenWidth - gameIcon.getWidth())/2, (this.getHeight() - hiddenHeight - gameIcon.getHeight())/20);
 
         //Asks user for input of what the area of the gameboard should be, located above start button
-        gridNumber.setLocation((this.getWidth() - hiddenWidth - gridNumber.getWidth())/5, (this.getHeight() - hiddenHeight - gridNumber.getHeight())/2 + this.getHeight()/4 - 50);
+        gridNumber.setLocation((this.getWidth() - hiddenWidth - gridNumber.getWidth())/5, (this.getHeight() - hiddenHeight - gridNumber.getHeight())/2 + this.getHeight()/4 - 100);
 
         //Asks user for input of how many chips must connect for a player to win
-        connectionsToWin.setLocation(4*(this.getWidth() - hiddenWidth - connectionsToWin.getWidth())/5, (this.getHeight() - hiddenHeight - connectionsToWin.getHeight())/2 + this.getHeight()/4 - 50);
+        connectionsToWin.setLocation(4*(this.getWidth() - hiddenWidth - connectionsToWin.getWidth())/5, (this.getHeight() - hiddenHeight - connectionsToWin.getHeight())/2 + this.getHeight()/4 - 100);
 
         player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth())/5, (this.getHeight() - hiddenHeight - player1.getHeight())/3);
 
         player2.setLocation(4*(this.getWidth() - hiddenWidth - player2.getWidth())/5, (this.getHeight() - hiddenHeight - player2.getHeight())/3);
 
         colorButtonPanel.setLocation((this.getWidth() - hiddenWidth - colorButtonPanel.getWidth())/2, (this.getHeight() - hiddenHeight - colorButtonPanel.getHeight())/3 + 30);
+
+        //Put the button underneath the game icon, with a decent amount of space
+        startButton.setLocation((this.getWidth() - hiddenWidth - startButton.getWidth())/2, (this.getHeight() - hiddenHeight - startButton.getHeight())/2 + this.getHeight()/4);
 
 
         this.setVisible(true);
@@ -143,12 +152,13 @@ public class GameOptionView extends JFrame{
      * This class will contain the user input area for the player's name
      */
     private class PlayerPanel extends JPanel {
+        JLabel colorLabel;
         public PlayerPanel(int playerNumber, String colorString){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("Player " + playerNumber + "'s name");
             JTextField connectionsField = new JTextField("Player " + playerNumber, 10);
             JLabel colorTitle = new JLabel("Color:");
-            JLabel colorLabel = new JLabel(colorString);
+            colorLabel = new JLabel(colorString);
 
             //Used to keep a small text field that is meant to hold 2 digits
             connectionsField.setMaximumSize(connectionsField.getPreferredSize());
@@ -165,20 +175,96 @@ public class GameOptionView extends JFrame{
 
 
         }
+
+        public String getColor(){
+            return colorLabel.getText();
+        }
+
+        public void setColorLabel(String text){
+            colorLabel.setText(text);
+        }
     }
 
     /**
      * This class contains the button that will switch which player has the red or yellow chip
      */
     private class ColorButtonPanel extends JPanel{
+        JButton switchButton;
         public ColorButtonPanel(){
-            JButton switchButton = new JButton("Switch");
+            switchButton = new JButton("Switch");
             this.add(switchButton);
             this.setLayout(new FlowLayout());
             this.setSize(this.getPreferredSize());
 
+            ListenForButton listenForButton = new ListenForButton();
+            switchButton.addActionListener(listenForButton);
+        }
+
+        private class ListenForButton implements ActionListener {
+            public ListenForButton(){
+
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == switchButton){
+                    if(player1.getColor() == "Red") {
+                        player1.setColorLabel("Yellow");
+                        player2.setColorLabel("Red");
+                    }
+                    else {
+                        player1.setColorLabel("Red");
+                        player2.setColorLabel("Yellow");
+                    }
+                }
+            }
         }
     }
+
+    /**
+     * This class contains the button that will be responsible for starting the game
+     */
+    private class ButtonPanel extends JPanel{
+        JButton startButton;
+        public ButtonPanel(){
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+            //Creating the Start Button for the game
+            startButton = new JButton("Start Game");
+            this.add(startButton);
+            startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            //Create a listener for the start button
+            ListenForButton listenForButton = new ListenForButton();
+            startButton.addActionListener(listenForButton);
+
+            //Makes the panel be the exact size to hold its components
+            this.setSize(this.getPreferredSize());
+
+        }
+
+        /**
+         * This class will monitor any clicks carried out on the start button,
+         * upon the click the frame will disappear and the game frame will open.
+         */
+        private class ListenForButton implements ActionListener{
+            public ListenForButton(){
+
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == startButton){
+                    //Upon the button being clicked, the frame will switch to that of the game.
+                    GameOptionView.this.setVisible(false);
+
+                }
+            }
+        }
+
+
+    }
+
 
 
 }

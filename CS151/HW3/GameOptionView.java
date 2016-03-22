@@ -25,14 +25,16 @@ public class GameOptionView extends JFrame{
         IconPanel gameIcon = new IconPanel();
         GridNumber gridNumber = new GridNumber();
         ConnectionsToWin connectionsToWin = new ConnectionsToWin();
-        PlayerPanel player1 = new PlayerPanel(1);
-        PlayerPanel player2 = new PlayerPanel(2);
+        PlayerPanel player1 = new PlayerPanel(1, "Red");
+        PlayerPanel player2 = new PlayerPanel(2, "Yellow");
+        ColorButtonPanel colorButtonPanel = new ColorButtonPanel();
 
         this.add(gameIcon);
         this.add(gridNumber);
         this.add(connectionsToWin);
         this.add(player1);
         this.add(player2);
+        this.add(colorButtonPanel);
 
         //Compute hidden height and width of the frame
         int hiddenHeight = getInsets().top + getInsets().bottom;
@@ -47,9 +49,11 @@ public class GameOptionView extends JFrame{
         //Asks user for input of how many chips must connect for a player to win
         connectionsToWin.setLocation(4*(this.getWidth() - hiddenWidth - connectionsToWin.getWidth())/5, (this.getHeight() - hiddenHeight - connectionsToWin.getHeight())/2 + this.getHeight()/4 - 50);
 
-        player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth())/5, (this.getHeight() - hiddenHeight - player1.getHeight())/4);
+        player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth())/5, (this.getHeight() - hiddenHeight - player1.getHeight())/3);
 
-        player2.setLocation(4*(this.getWidth() - hiddenWidth - player2.getWidth())/5, (this.getHeight() - hiddenHeight - player2.getHeight())/4);
+        player2.setLocation(4*(this.getWidth() - hiddenWidth - player2.getWidth())/5, (this.getHeight() - hiddenHeight - player2.getHeight())/3);
+
+        colorButtonPanel.setLocation((this.getWidth() - hiddenWidth - colorButtonPanel.getWidth())/2, (this.getHeight() - hiddenHeight - colorButtonPanel.getHeight())/3 + 30);
 
 
         this.setVisible(true);
@@ -97,7 +101,7 @@ public class GameOptionView extends JFrame{
         public GridNumber(){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("How many rows/columns?");
-            JTextField gridField = new JTextField(2);
+            JTextField gridField = new JTextField("7",2);
 
             //Used to keep a small text field that is meant to hold 2 digits
             gridField.setMaximumSize(gridField.getPreferredSize());
@@ -120,7 +124,7 @@ public class GameOptionView extends JFrame{
         public ConnectionsToWin(){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("How many connections to win?");
-            JTextField connectionsField = new JTextField(2);
+            JTextField connectionsField = new JTextField("4",2);
 
             //Used to keep a small text field that is meant to hold 2 digits
             connectionsField.setMaximumSize(connectionsField.getPreferredSize());
@@ -135,20 +139,42 @@ public class GameOptionView extends JFrame{
         }
     }
 
+    /**
+     * This class will contain the user input area for the player's name
+     */
     private class PlayerPanel extends JPanel {
-        public PlayerPanel(int playerNumber){
+        public PlayerPanel(int playerNumber, String colorString){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("Player " + playerNumber + "'s name");
             JTextField connectionsField = new JTextField("Player " + playerNumber, 10);
+            JLabel colorTitle = new JLabel("Color:");
+            JLabel colorLabel = new JLabel(colorString);
 
             //Used to keep a small text field that is meant to hold 2 digits
             connectionsField.setMaximumSize(connectionsField.getPreferredSize());
 
             title.setAlignmentX(Component.CENTER_ALIGNMENT);
             connectionsField.setAlignmentX(Component.CENTER_ALIGNMENT);
-
+            colorTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+            colorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.add(title);
             this.add(connectionsField);
+            this.add(colorTitle);
+            this.add(colorLabel);
+            this.setSize(this.getPreferredSize());
+
+
+        }
+    }
+
+    /**
+     * This class contains the button that will switch which player has the red or yellow chip
+     */
+    private class ColorButtonPanel extends JPanel{
+        public ColorButtonPanel(){
+            JButton switchButton = new JButton("Switch");
+            this.add(switchButton);
+            this.setLayout(new FlowLayout());
             this.setSize(this.getPreferredSize());
 
         }

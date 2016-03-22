@@ -64,15 +64,12 @@ public class GameView extends JFrame{
 	}
 	
 	/**
-	 * This is an inner class resembling the JPanel that contains the game's icon button.
+	 * This is an inner class resembling the JPanel that contains the game's icon.
 	 * @author Mohammad
 	 */
 	private class IconPanel extends JPanel{
 		public IconPanel(){
-			//Sets the layout of the panel to a BoxLayout allowing for better component alignment
-			//this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			
-			
+
 			//Creating the Icon for the game and added it to the StartPanel
 			BufferedImage gameIcon = null;
 			try{
@@ -123,10 +120,6 @@ public class GameView extends JFrame{
 		 * upon the click the frame will disappear and the game frame will open.
 		 */
 		private class ListenForButton implements ActionListener{
-			public ListenForButton(){
-
-			}
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource() == startButton){

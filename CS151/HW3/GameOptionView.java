@@ -14,7 +14,7 @@ import javax.swing.*;
  * This class contains the user interface that will carry out the game functions as well as display the game
  */
 public class GameOptionView extends JFrame{
-
+    //Declared as global variables so action listener could access data
     PlayerPanel player1;
     PlayerPanel player2;
 
@@ -26,6 +26,7 @@ public class GameOptionView extends JFrame{
         this.setTitle("2 Player Connect Four");
         this.setLayout(null);
 
+        //Creating instances of the component panels
         IconPanel gameIcon = new IconPanel();
         GridNumber gridNumber = new GridNumber();
         ConnectionsToWin connectionsToWin = new ConnectionsToWin();
@@ -34,6 +35,7 @@ public class GameOptionView extends JFrame{
         ColorButtonPanel colorButtonPanel = new ColorButtonPanel();
         ButtonPanel startButton = new ButtonPanel();
 
+        //Adding components to the JFrame
         this.add(gameIcon);
         this.add(gridNumber);
         this.add(connectionsToWin);
@@ -55,10 +57,13 @@ public class GameOptionView extends JFrame{
         //Asks user for input of how many chips must connect for a player to win
         connectionsToWin.setLocation(4*(this.getWidth() - hiddenWidth - connectionsToWin.getWidth())/5, (this.getHeight() - hiddenHeight - connectionsToWin.getHeight())/2 + this.getHeight()/4 - 100);
 
+        //User can set the name for Player 1, it will be set to 'Player 1' by default
         player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth())/5, (this.getHeight() - hiddenHeight - player1.getHeight())/3);
 
+        //User can set the name for Player 2, it will be set to 'Player 2' by default
         player2.setLocation(4*(this.getWidth() - hiddenWidth - player2.getWidth())/5, (this.getHeight() - hiddenHeight - player2.getHeight())/3);
 
+        //Upon clicking this button it will change which player uses the red chip and which uses the yellow
         colorButtonPanel.setLocation((this.getWidth() - hiddenWidth - colorButtonPanel.getWidth())/2, (this.getHeight() - hiddenHeight - colorButtonPanel.getHeight())/3 + 30);
 
         //Put the button underneath the game icon, with a decent amount of space
@@ -70,14 +75,11 @@ public class GameOptionView extends JFrame{
     }
 
     /**
-     * This is an inner class resembling the JPanel that contains the game's icon button.
+     * This is an inner class resembling the JPanel that contains the game's icon.
      * @author Mohammad
      */
     private class IconPanel extends JPanel{
         public IconPanel(){
-            //Sets the layout of the panel to a BoxLayout allowing for better component alignment
-            //this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
 
             //Creating the Icon for the game and added it to the StartPanel
             BufferedImage gameIcon = null;
@@ -248,15 +250,12 @@ public class GameOptionView extends JFrame{
          * upon the click the frame will disappear and the game frame will open.
          */
         private class ListenForButton implements ActionListener{
-            public ListenForButton(){
-
-            }
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource() == startButton){
                     //Upon the button being clicked, the frame will switch to that of the game.
                     GameOptionView.this.setVisible(false);
+                    new GamePlayView();
 
                 }
             }

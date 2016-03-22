@@ -35,11 +35,11 @@ public class ConnectFour {
      * checks whether there's a win condition
      * @return true if one of the players win
      */
-    private boolean didWin(int x, int y, Chip chip, int connectionsRequired) {
+    public boolean didWin(int x, int y, Chip chip, int connectionsRequired) {
         int counter = 0;
         //check horizontally
         for (int i = 0; i < structure.length; i++) {
-            if (chip.getIdentifier() == structure[i][y].getIdentifier()) {
+            if (structure[i][y] != null && chip.getIdentifier() == structure[i][y].getIdentifier()) {
                 counter++;
                 if (counter >= connectionsRequired) {
                     return true;
@@ -51,7 +51,7 @@ public class ConnectFour {
         //check vertically
         counter = 0;
         for (int i = 0; i < structure.length; i++) {
-            if (chip.getIdentifier() == structure[x][i].getIdentifier()) {
+            if (structure[x][i] != null &&chip.getIdentifier() == structure[x][i].getIdentifier()) {
                 counter++;
                 if (counter >= connectionsRequired) {
                     return true;

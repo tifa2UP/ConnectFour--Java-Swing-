@@ -17,6 +17,8 @@ public class GameOptionView extends JFrame{
     //Declared as global variables so action listener could access data
     PlayerPanel player1;
     PlayerPanel player2;
+    GridNumber gridNumber;
+    ConnectionsToWin connectionsToWin;
 
     public GameOptionView(){
         this.setSize(600,600);
@@ -28,8 +30,8 @@ public class GameOptionView extends JFrame{
 
         //Creating instances of the component panels
         IconPanel gameIcon = new IconPanel();
-        GridNumber gridNumber = new GridNumber();
-        ConnectionsToWin connectionsToWin = new ConnectionsToWin();
+        gridNumber = new GridNumber();
+        connectionsToWin = new ConnectionsToWin();
         player1 = new PlayerPanel(1, "Red");
         player2 = new PlayerPanel(2, "Yellow");
         ColorButtonPanel colorButtonPanel = new ColorButtonPanel();
@@ -74,6 +76,30 @@ public class GameOptionView extends JFrame{
 
     }
 
+    public String getPlayer1Name(){
+        return player1.getPlayerName();
+    }
+
+    public String getPlayer2Name(){
+        return player2.getPlayerName();
+    }
+
+    public int getRows(){
+        return gridNumber.getRows();
+    }
+
+    public int getChipsToWin(){
+        return connectionsToWin.getConnections();
+    }
+
+    public String getPlayer1Color(){
+        return player1.getColor();
+    }
+
+    public String getPlayer2Color(){
+        return player2.getColor();
+    }
+
     /**
      * This is an inner class resembling the JPanel that contains the game's icon.
      * @author Mohammad
@@ -109,10 +135,11 @@ public class GameOptionView extends JFrame{
      * to know how many rows and columns should be in the grid. Maximum 10.
      */
     private class GridNumber extends JPanel {
+        JTextField gridField;
         public GridNumber(){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("How many rows/columns?");
-            JTextField gridField = new JTextField("7",2);
+            gridField = new JTextField("7",2);
 
             //Used to keep a small text field that is meant to hold 2 digits
             gridField.setMaximumSize(gridField.getPreferredSize());
@@ -125,6 +152,15 @@ public class GameOptionView extends JFrame{
             this.setSize(this.getPreferredSize());
 
         }
+
+        public void setRows(String number){
+            gridField.setText(number);
+        }
+
+        public int getRows(){
+            int rows = Integer.parseInt(gridField.getText());
+            return rows;
+        }
     }
 
     /**
@@ -132,10 +168,11 @@ public class GameOptionView extends JFrame{
      * for someone to win. It cannot be greater than the amount of rows or columns.
      */
     private class ConnectionsToWin extends JPanel {
+        JTextField connectionsField;
         public ConnectionsToWin(){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("How many connections to win?");
-            JTextField connectionsField = new JTextField("4",2);
+            connectionsField = new JTextField("4",2);
 
             //Used to keep a small text field that is meant to hold 2 digits
             connectionsField.setMaximumSize(connectionsField.getPreferredSize());
@@ -148,6 +185,16 @@ public class GameOptionView extends JFrame{
             this.setSize(this.getPreferredSize());
 
         }
+
+        public void setConnections(String number){
+            connectionsField.setText(number);
+        }
+
+        public int getConnections(){
+            int connections = Integer.parseInt(connectionsField.getText());
+            return connections;
+        }
+
     }
 
     /**
@@ -155,29 +202,30 @@ public class GameOptionView extends JFrame{
      */
     private class PlayerPanel extends JPanel {
         JLabel colorLabel;
+        JTextField playerField;
         public PlayerPanel(int playerNumber, String colorString){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("Player " + playerNumber + "'s name");
-            JTextField connectionsField = new JTextField("Player " + playerNumber, 10);
+            playerField = new JTextField("Player " + playerNumber, 10);
             JLabel colorTitle = new JLabel("Color:");
             colorLabel = new JLabel(colorString);
 
             //Used to keep a small text field that is meant to hold 2 digits
-            connectionsField.setMaximumSize(connectionsField.getPreferredSize());
+            playerField.setMaximumSize(playerField.getPreferredSize());
 
             title.setAlignmentX(Component.CENTER_ALIGNMENT);
-            connectionsField.setAlignmentX(Component.CENTER_ALIGNMENT);
+            playerField.setAlignmentX(Component.CENTER_ALIGNMENT);
             colorTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
             colorLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.add(title);
-            this.add(connectionsField);
+            this.add(playerField);
             this.add(colorTitle);
             this.add(colorLabel);
             this.setSize(this.getPreferredSize());
 
 
         }
-
+        //Gets the
         public String getColor(){
             return colorLabel.getText();
         }
@@ -185,6 +233,10 @@ public class GameOptionView extends JFrame{
         public void setColorLabel(String text){
             colorLabel.setText(text);
         }
+
+        public String getPlayerName(){ return playerField.getText(); }
+
+        public void setPlayerName(String name){ playerField.setText(name);}
     }
 
     /**
@@ -203,10 +255,6 @@ public class GameOptionView extends JFrame{
         }
 
         private class ListenForButton implements ActionListener {
-            public ListenForButton(){
-
-            }
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource() == switchButton){
@@ -255,7 +303,15 @@ public class GameOptionView extends JFrame{
                 if(e.getSource() == startButton){
                     //Upon the button being clicked, the frame will switch to that of the game.
                     GameOptionView.this.setVisible(false);
-                    new GamePlayView();
+                    if(gridNumber.getRows() != 7)
+                        gridNumber.setRows("" + gridNumber.getRows());
+                    if(connectionsToWin.getConnections() != 4)
+                        connectionsToWin.setConnections("" + connectionsToWin.getConnections());
+                    if(!player1.getPlayerName().equals("Player 1"))
+                        player1.setPlayerName(player1.getPlayerName());
+                    if(!player2.getPlayerName().equals("Player 2"))
+                        player2.setPlayerName(player2.getPlayerName());
+                    new GamePlayView(GameOptionView.this);
 
                 }
             }

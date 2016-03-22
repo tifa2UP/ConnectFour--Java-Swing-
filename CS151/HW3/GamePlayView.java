@@ -14,7 +14,9 @@ import javax.swing.*;
  */
 public class GamePlayView extends JFrame{
 
-    public GamePlayView(){
+    GameOptionView previousWindow;
+    public GamePlayView(GameOptionView previousWindow){
+        this.previousWindow = previousWindow;
         this.setSize(600,600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -23,8 +25,9 @@ public class GamePlayView extends JFrame{
         this.setLayout(null);
 
         IconPanel gameIcon = new IconPanel();
-
+        GamePanel names = new GamePanel();
         this.add(gameIcon);
+        this.add(names);
 
         //Compute hidden height and width of the frame
         int hiddenHeight = getInsets().top + getInsets().bottom;
@@ -32,7 +35,7 @@ public class GamePlayView extends JFrame{
 
         //Maintains the game logo at the top of the window
         gameIcon.setLocation((this.getWidth() - hiddenWidth - gameIcon.getWidth())/2, (this.getHeight() - hiddenHeight - gameIcon.getHeight())/20);
-
+        names.setLocation((this.getWidth() - hiddenWidth - names.getWidth())/2, (this.getHeight() - hiddenHeight - names.getHeight())/2);
 
 
 
@@ -69,7 +72,24 @@ public class GamePlayView extends JFrame{
         }
     }
 
+    private class GamePanel extends JPanel{
+        public GamePanel(){
+            JLabel name = new JLabel(previousWindow.getPlayer1Name());
+            JLabel color = new JLabel(previousWindow.getPlayer1Color());
+            JLabel name2 = new JLabel(previousWindow.getPlayer2Name());
+            JLabel color2 = new JLabel(previousWindow.getPlayer2Color());
+            JLabel rows = new JLabel("" + previousWindow.getRows());
+            JLabel toWin = new JLabel("" + previousWindow.getChipsToWin());
+            this.add(name);
+            this.add(color);
+            this.add(name2);
+            this.add(color2);
+            this.add(rows);
+            this.add(toWin);
+            this.setSize(this.getPreferredSize());
 
+        }
+    }
 
 
 

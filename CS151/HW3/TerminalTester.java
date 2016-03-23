@@ -12,9 +12,15 @@ public class TerminalTester {
         Player mohammad = new Player("Mohammad", chip2);
 
         ConnectFour board = new ConnectFour(2, abdellatif, mohammad);
-        board.insertChip(0, abdellatif);
-        board.insertChip(1, mohammad);
         board.insertChip(1, abdellatif);
+        System.out.println(board.didWin(1,0, chip1, 2));
+        board.insertChip(0, mohammad);
+        System.out.println(board.didWin(0,0, chip2, 2));
+        board.insertChip(1, abdellatif);
+        System.out.println(board.didWin(1,1, chip1, 2));
+        board.insertChip(0, mohammad);
+
+
 //        board.insertChip(, mohammad);
 //        board.insertChip(1, abdellatif);
         board.printBoard();

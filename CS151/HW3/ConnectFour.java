@@ -72,7 +72,7 @@ public class ConnectFour {
         int yReplica = y;
         //check the positive slope diagonal
         //start from the chip position and decrement x and y until the position hits a boundary
-        while (x > 0 && y > 0) {
+        while (xReplica > 0 && yReplica > 0) {
             xReplica--;
             yReplica--;
         }
@@ -85,6 +85,11 @@ public class ConnectFour {
                 if (counter >= connectionsRequired) {
                     return true;
                 }
+                //break the loop when it's out of bounds
+                if (xReplica < 0 || yReplica < 0 || xReplica > structure.length - 1 || yReplica > structure.length - 1){
+                    counter = 0;
+                    break;
+                }
             } else {
                 counter = 0;
             }
@@ -96,7 +101,7 @@ public class ConnectFour {
         xReplica = x;
         yReplica = y;
         //traverse the board in the negative slope until the position hits a border
-        while (x < structure.length - 1 && y > 0) {
+        while (xReplica < structure.length - 1 && yReplica > 0) {
             xReplica++;
             yReplica--;
         }
@@ -107,6 +112,10 @@ public class ConnectFour {
                 yReplica++;
                 if (counter >= connectionsRequired) {
                     return true;
+                }
+                //break the loop when it's out of bounds
+                if (xReplica < 0 || yReplica < 0 || xReplica > structure.length - 1 || yReplica > structure.length - 1){
+                    break;
                 }
             } else {
                 counter = 0;

@@ -18,8 +18,10 @@ public class ConnectFour {
     private Player player1;
     //the second player
     private Player player2;
+    //the number of connections required to win the game
+    private int connectionsRequired;
 
-    public ConnectFour(int boardSize, Player player1, Player player2) {
+    public ConnectFour(int boardSize, Player player1, Player player2, int connectionsRequired) {
         //create a new empty board of Chips
         structure = new Chip[boardSize][boardSize];
         //initialize the new position for insert at any column to 0
@@ -29,13 +31,15 @@ public class ConnectFour {
         }
         this.player1 = player1;
         this.player2 = player2;
+        this.connectionsRequired = connectionsRequired;
     }
 
     /**
      * checks whether there's a win condition
      * @return true if one of the players win
      */
-    public boolean didWin(int x, int y, Chip chip, int connectionsRequired) {
+    public boolean didWin(int x, Chip chip) {
+        int y = positionForInsert[x] - 1;
         int counter = 0;
         //check horizontally
         for (int i = 0; i < structure.length; i++) {
@@ -51,7 +55,7 @@ public class ConnectFour {
         //check vertically
         counter = 0;
         for (int i = 0; i < structure.length; i++) {
-            if (structure[x][i] != null &&chip.getIdentifier() == structure[x][i].getIdentifier()) {
+            if (structure[x][i] != null && chip.getIdentifier() == structure[x][i].getIdentifier()) {
                 counter++;
                 if (counter >= connectionsRequired) {
                     return true;
@@ -61,7 +65,54 @@ public class ConnectFour {
             }
 
         }
+        //reset the counter
+        counter = 0;
         //TODO: implement the two diagonal orientations
+        int xReplica = x;
+        int yReplica = y;
+        //check the positive slope diagonal
+        //start from the chip position and decrement x and y until the position hits a boundary
+        while (x > 0 && y > 0) {
+            xReplica--;
+            yReplica--;
+        }
+
+        for (int i = 0; i < structure.length; i++) {
+            if (structure[xReplica][yReplica] != null && chip.getIdentifier() == structure[xReplica][yReplica].getIdentifier()) {
+                counter++;
+                xReplica++;
+                yReplica++;
+                if (counter >= connectionsRequired) {
+                    return true;
+                }
+            } else {
+                counter = 0;
+            }
+        }
+        //check the negative slope diagonal for a win condition
+        //reset the counter
+        counter = 0;
+        //reinitialize the x and y components to the original chip position
+        xReplica = x;
+        yReplica = y;
+        //traverse the board in the negative slope until the position hits a border
+        while (x < structure.length - 1 && y > 0) {
+            xReplica++;
+            yReplica--;
+        }
+        for (int i = 0; i < structure.length; i++) {
+            if (structure[xReplica][yReplica] != null && chip.getIdentifier() == structure[xReplica][yReplica].getIdentifier()) {
+                counter++;
+                xReplica--;
+                yReplica++;
+                if (counter >= connectionsRequired) {
+                    return true;
+                }
+            } else {
+                counter = 0;
+            }
+
+        }
         return false;
     }
 
@@ -80,6 +131,7 @@ public class ConnectFour {
             //create a new line after every row
             System.out.println();
         }
+        System.out.println("==============");
     }
 
     /**

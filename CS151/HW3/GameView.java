@@ -45,11 +45,11 @@ public class GameView extends JFrame{
 		int hiddenHeight = getInsets().top + getInsets().bottom;
 		int hiddenWidth = getInsets().left + getInsets().right;
 
-		//Center the start panel in the frame
-		iconPanel.setLocation((this.getWidth() - hiddenWidth - iconPanel.getWidth())/2, (this.getHeight() - hiddenHeight - iconPanel.getHeight())/2);
+		//Center the icon panel in the frame
+		iconPanel.setLocation((this.getWidth() - hiddenWidth - iconPanel.getWidth())/2, (this.getHeight() - hiddenHeight - iconPanel.getHeight())/4);
 
 		//Put the button underneath the game icon, with a decent amount of space
-		buttonPanel.setLocation((this.getWidth() - hiddenWidth - buttonPanel.getWidth())/2, (this.getHeight() - hiddenHeight - buttonPanel.getHeight())/2 + this.getHeight()/4);
+		buttonPanel.setLocation((this.getWidth() - hiddenWidth - buttonPanel.getWidth())/2, (this.getHeight() - hiddenHeight - buttonPanel.getHeight())/2 + this.getHeight()/8);
 
 		//Put the copyright text at the bottom of the window
 		textPanel.setLocation((this.getWidth() - hiddenWidth - textPanel.getWidth())/2, (this.getHeight() - hiddenHeight - textPanel.getHeight())/2 + this.getHeight()/3);

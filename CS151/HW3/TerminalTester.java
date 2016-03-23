@@ -11,10 +11,19 @@ public class TerminalTester {
         Player abdellatif = new Player("Abdellatif", chip1);
         Player mohammad = new Player("Mohammad", chip2);
 
-        ConnectFour board = new ConnectFour(2, abdellatif, mohammad);
-        board.insertChip(0, abdellatif);
-        board.insertChip(1, mohammad);
+        ConnectFour board = new ConnectFour(4, abdellatif, mohammad,3);
         board.insertChip(1, abdellatif);
+        System.out.println(board.didWin(1, chip1));
+        board.insertChip(0, mohammad);
+        board.printBoard();
+        //TODO: fix the bug in the orientation
+//        System.out.println(board.didWin(0, chip2));
+        //TODO: fix the bug for the -1 index
+//        board.insertChip(1, abdellatif);
+//        System.out.println(board.didWin(1, chip1));
+//        board.insertChip(0, mohammad);
+
+
 //        board.insertChip(, mohammad);
 //        board.insertChip(1, abdellatif);
         board.printBoard();

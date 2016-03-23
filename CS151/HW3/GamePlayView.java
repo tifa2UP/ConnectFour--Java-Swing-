@@ -25,9 +25,11 @@ public class GamePlayView extends JFrame{
         this.setLayout(null);
 
         IconPanel gameIcon = new IconPanel();
-        GamePanel names = new GamePanel();
+        PlayerPanel player1 = new PlayerPanel(previousWindow.getPlayer1Name());
+        PlayerPanel player2 = new PlayerPanel(previousWindow.getPlayer2Name());
         this.add(gameIcon);
-        this.add(names);
+        this.add(player1);
+        this.add(player2);
 
         //Compute hidden height and width of the frame
         int hiddenHeight = getInsets().top + getInsets().bottom;
@@ -35,7 +37,9 @@ public class GamePlayView extends JFrame{
 
         //Maintains the game logo at the top of the window
         gameIcon.setLocation((this.getWidth() - hiddenWidth - gameIcon.getWidth())/2, (this.getHeight() - hiddenHeight - gameIcon.getHeight())/20);
-        names.setLocation((this.getWidth() - hiddenWidth - names.getWidth())/2, (this.getHeight() - hiddenHeight - names.getHeight())/2);
+        //Labels containing the Players names, will tell who's turn it is to go
+        player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth())/10, (this.getHeight() - hiddenHeight - player1.getHeight())/2);
+        player2.setLocation(9*(this.getWidth() - hiddenWidth - player2.getWidth())/10, (this.getHeight() - hiddenHeight - player2.getHeight())/2);
 
 
 
@@ -72,21 +76,24 @@ public class GamePlayView extends JFrame{
         }
     }
 
-    private class GamePanel extends JPanel{
-        public GamePanel(){
-            JLabel name = new JLabel(previousWindow.getPlayer1Name());
-            JLabel color = new JLabel(previousWindow.getPlayer1Color());
-            JLabel name2 = new JLabel(previousWindow.getPlayer2Name());
-            JLabel color2 = new JLabel(previousWindow.getPlayer2Color());
-            JLabel rows = new JLabel("" + previousWindow.getRows());
-            JLabel toWin = new JLabel("" + previousWindow.getChipsToWin());
-            this.add(name);
-            this.add(color);
-            this.add(name2);
-            this.add(color2);
-            this.add(rows);
-            this.add(toWin);
+    /**
+     * This class contains a label that holds the Players' names and also states whose turn it is
+     */
+    private class PlayerPanel extends JPanel{
+        public PlayerPanel(String name){
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            JLabel nameLabel = new JLabel(name);
+            JLabel turn = new JLabel();
+            if(name.equals(previousWindow.getPlayer1Name()))
+                turn.setText("Your Turn!");
+            nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            turn.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            this.add(nameLabel);
+            this.add(turn);
+
             this.setSize(this.getPreferredSize());
+
 
         }
     }

@@ -16,17 +16,19 @@ import javax.swing.border.Border;
  * drop chips into each column
  * Created by Momo on 3/21/16.
  */
-public class GamePlayView extends JFrame{
+public class GamePlayView extends JFrame {
 
     GameOptionView previousWindow;
     GameBoard gameBoard;
+    PlayerPanel player1;
+    PlayerPanel player2;
 
     int clickCount = 0;
     boolean isRed;
 
-    public GamePlayView(GameOptionView previousWindow){
+    public GamePlayView(GameOptionView previousWindow) {
         this.previousWindow = previousWindow;
-        this.setSize(600,600);
+        this.setSize(600, 600);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setResizable(false);
@@ -34,8 +36,9 @@ public class GamePlayView extends JFrame{
         this.setLayout(null);
 
         IconPanel gameIcon = new IconPanel();
-        PlayerPanel player1 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player1));
-        PlayerPanel player2 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player2));
+        player1 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player1));
+        player2 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player2));
+        player2.setSize(player1.getSize());
         gameBoard = new GameBoard();
 
 
@@ -49,31 +52,44 @@ public class GamePlayView extends JFrame{
         int hiddenWidth = getInsets().left + getInsets().right;
 
         //Maintains the game logo at the top of the window
-        gameIcon.setLocation((this.getWidth() - hiddenWidth - gameIcon.getWidth())/2, (this.getHeight() - hiddenHeight - gameIcon.getHeight())/20);
+        gameIcon.setLocation((this.getWidth() - hiddenWidth - gameIcon.getWidth()) / 2, (this.getHeight() - hiddenHeight - gameIcon.getHeight()) / 20);
         //Labels containing the Players names, will tell who's turn it is to go
-        player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth())/15, (this.getHeight() - hiddenHeight - player1.getHeight())/2);
-        player2.setLocation(14*(this.getWidth() - hiddenWidth - player2.getWidth())/15, (this.getHeight() - hiddenHeight - player2.getHeight())/2);
+        player1.setLocation((this.getWidth() - hiddenWidth - player1.getWidth()) / 15, (this.getHeight() - hiddenHeight - player1.getHeight()) / 2);
+        player2.setLocation(14 * (this.getWidth() - hiddenWidth - player2.getWidth()) / 15, (this.getHeight() - hiddenHeight - player2.getHeight()) / 2);
         //Centers the gameboard in the middle of the screen
-        gameBoard.setLocation((this.getWidth() - hiddenWidth - gameBoard.getWidth())/2, (this.getHeight() - hiddenHeight - gameBoard.getHeight())/2 + 50);
-
+        gameBoard.setLocation((this.getWidth() - hiddenWidth - gameBoard.getWidth()) / 2, (this.getHeight() - hiddenHeight - gameBoard.getHeight()) / 2 + 50);
 
 
         this.setVisible(true);
     }
 
+    //This method will switch the label underneath a players name whether it is their turn or not
+    public void setTurn(int player) {
+        if (player == 1) {
+            player1.turn.setText("Your Turn!");
+            player2.turn.setText("");
+        } else {
+            player1.turn.setText("");
+            player2.turn.setText("Your Turn!");
+
+
+        }
+
+    }
+
     /**
      * This is an inner class resembling the JPanel that contains the game's icon button.
+     *
      * @author Mohammad
      */
-    private class IconPanel extends JPanel{
-        public IconPanel(){
+    private class IconPanel extends JPanel {
+        public IconPanel() {
 
             //Creating the Icon for the game and added it to the StartPanel
             BufferedImage gameIcon = null;
-            try{
+            try {
                 gameIcon = ImageIO.read(new File("img/connect4_logo.png"));
-            }
-            catch(IOException ioEx) {
+            } catch (IOException ioEx) {
                 System.out.println("Problem loading icon");
             }
 
@@ -94,13 +110,19 @@ public class GamePlayView extends JFrame{
     /**
      * This class contains a label that holds the Players' names and also states whose turn it is
      */
-    private class PlayerPanel extends JPanel{
-        public PlayerPanel(String name){
+    private class PlayerPanel extends JPanel {
+        JLabel turn;
+
+        public PlayerPanel(String name) {
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel nameLabel = new JLabel(name);
-            JLabel turn = new JLabel();
-            if(name.equals(previousWindow.getPlayerName(previousWindow.player1)))
+            turn = new JLabel();
+            //Initially it will be Player 1's turn, so they will have the Your Turn! label
+            if (name.equals(previousWindow.getPlayerName(previousWindow.player1)))
                 turn.setText("Your Turn!");
+            else
+                turn.setText(" ");
+
             nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             turn.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -108,33 +130,33 @@ public class GamePlayView extends JFrame{
             this.add(turn);
 
             this.setSize(this.getPreferredSize());
-
-
         }
+
+
     }
+
 
     /**
      * This class will contain the presentation of the gameboard that will fill a designated slot with a chip
      */
-    private class GameBoard extends JPanel{
+    private class GameBoard extends JPanel {
 
         ListenForButton listenForButton;
         ChipButton[][] slots;
-        public GameBoard(){
+
+        public GameBoard() {
             int rows = previousWindow.getRows();
-            this.setMaximumSize(new Dimension(325,325));
+            this.setMaximumSize(new Dimension(325, 325));
             this.setSize(this.getMaximumSize());
             this.setBackground(new Color(0, 0, 128));
-            this.setLayout(new GridLayout(rows,rows));
-            this.setBorder(BorderFactory.createMatteBorder(10,10,0,0, new Color(0, 0, 128)));
+            this.setLayout(new GridLayout(rows, rows));
+            this.setBorder(BorderFactory.createMatteBorder(10, 10, 0, 0, new Color(0, 0, 128)));
 
             slots = new ChipButton[rows][rows];
             listenForButton = new ListenForButton();
-            for(int row = 0; row < rows; row++)
-            {
-                for(int column = 0; column < rows; column++)
-                {
-                    slots[row][column] =  new ChipButton();
+            for (int row = 0; row < rows; row++) {
+                for (int column = 0; column < rows; column++) {
+                    slots[row][column] = new ChipButton();
                     ChipButton button = slots[row][column];
                     button.addActionListener(listenForButton);
                     this.add(button);
@@ -147,10 +169,11 @@ public class GamePlayView extends JFrame{
         /**
          * These represent the slots in the gameboard, once clicked they will drop a chip into the column
          */
-        private class ChipButton extends JButton{
+        private class ChipButton extends JButton {
             public boolean isColored = false;
             public Color chipColor = null;
-            public ChipButton(){
+
+            public ChipButton() {
 
                 //Creates a button that is perfectly round
                 Dimension size = this.getPreferredSize();
@@ -163,14 +186,14 @@ public class GamePlayView extends JFrame{
 
             }
 
-            public void setChipColor(Color color){
+            public void setChipColor(Color color) {
                 chipColor = color;
             }
 
 
-
+            //This sets the slot color, if the slot is already colored it will maintain the color
             protected void paintComponent(Graphics g) {
-                if(!isColored) {
+                if (!isColored) {
                     g.setColor(Color.white);
                 } else {
                     g.setColor(this.chipColor);
@@ -182,47 +205,59 @@ public class GamePlayView extends JFrame{
 
             // Paint the border of the button using a simple stroke.
             protected void paintBorder(Graphics g) {
-                if(!isColored) {
+                if (!isColored) {
                     g.setColor(getForeground());
                     g.drawOval(0, 0, getSize().width - 10, getSize().height - 10);
                 }
             }
 
             //This will color the slot yellow resembling the appropriate player's chip
-            public void recolorYellow(){
+            public void recolorYellow() {
                 Graphics g = this.getGraphics();
                 g.setColor(Color.YELLOW);
-                g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                g.fillOval(0, 0, this.getSize().width - 10, this.getSize().height - 10);
                 this.setChipColor(Color.YELLOW);
                 this.isColored = true;
             }
 
             //This will color the slot red resembling the appropriate player's chip
-            public void recolorRed(){
+            public void recolorRed() {
                 Graphics g = this.getGraphics();
                 g.setColor(Color.RED);
-                g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                g.fillOval(0, 0, this.getSize().width - 10, this.getSize().height - 10);
                 this.setChipColor(Color.RED);
                 this.isColored = true;
             }
 
 
-
         }
 
-
-
+        /**
+         * This class comprehends whether a slot on a certain column was clicked,
+         * adds a chip to the lowest slot in the column
+         */
         private class ListenForButton implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int rowIndex = 0;
                 int columnIndex = 0;
+                boolean isPlayer1;
+                boolean isPlayer1Red = true;
+                if (!previousWindow.getPlayer1Color().equals("Red")) {
+                    isPlayer1Red = false;
+                }
+                if (clickCount % 2 != 0) {
+                    isPlayer1 = false;
+                    setTurn(1);
+                } else {
+                    isPlayer1 = true;
+                    setTurn(2);
+                }
+
                 outerloop:
-                for(int i = 0; i < slots.length; i++){
-                    for(int j = 0; j < slots.length; j++){
-                        if(e.getSource() == slots[i][j]){
-                            rowIndex = i;
+                for (int i = 0; i < slots.length; i++) {
+                    for (int j = 0; j < slots.length; j++) {
+                        if (e.getSource() == slots[i][j]) {
                             columnIndex = j;
                             break outerloop;
                         }
@@ -231,90 +266,36 @@ public class GamePlayView extends JFrame{
 
                 }
 
-                for(int i = rowIndex; i < slots.length; i++){
-                    boolean isPlayer1 = true;
-                    boolean isPlayer1Red = true;
-                    if(!previousWindow.getPlayer1Color().equals("Red")){
-                        isPlayer1Red = false;
-                    }
-                    if(clickCount%2 != 0){
-                        isPlayer1 = false;
-                    }
+                //These conditionals decide whether the chip needs to be red or not
+                if (isPlayer1 && !isPlayer1Red)
+                    isRed = false;
+                else if (!isPlayer1 && isPlayer1Red)
+                    isRed = false;
+                else
+                    isRed = true;
 
-                    if(isPlayer1 && !isPlayer1Red)
-                        isRed = false;
-                    else if(!isPlayer1 && isPlayer1Red)
-                        isRed = false;
-                    else
-                        isRed = true;
-
-
-
-                    if(i == slots.length - 1){
-                        ChipButton temp = slots[i][columnIndex];
-                        if(!temp.isColored) {
-                            if (isRed) {
-                                temp.recolorRed();
-                            } else {
-                                temp.recolorYellow();
-                            }
-                            temp.removeActionListener(listenForButton);
-                            temp.removeMouseListener(temp.getMouseListeners()[0]);
-                            clickCount++;
-                            return;
-                        }
-                    }
-                    else if(slots[i+1][columnIndex].isColored){
-                        ChipButton temp = slots[i][columnIndex];
-                        if(!temp.isColored) {
-                            if (isRed) {
-                                temp.recolorRed();
-                            } else {
-                                temp.recolorYellow();
-                            }
-                            clickCount++;
-                            return;
-                        }
-                    }
-                    else if(!slots[slots.length-1][columnIndex].isColored){
-                        ChipButton temp = slots[slots.length-1][columnIndex];
-                        if(isRed){
+                //Iterates from the bottom of the column, fills the lowest empty slot with the proper chip
+                ChipButton temp;
+                int decrease = slots.length;
+                while (decrease > 0) {
+                    temp = slots[decrease - 1][columnIndex];
+                    if (!temp.isColored) {
+                        if (isRed) {
                             temp.recolorRed();
-                        }
-                        else {
+                        } else {
                             temp.recolorYellow();
                         }
                         clickCount++;
                         return;
-
                     }
-                    else if(slots[i][columnIndex].isColored){
-                        ChipButton temp = slots[i - 1][columnIndex];
-                        while(i < 0){
-                            temp = slots[i-1][columnIndex];
-                            if(!temp.isColored){
-                                if (isRed) {
-                                    temp.recolorRed();
-                                } else {
-                                    temp.recolorYellow();
-                                }
-                                clickCount++;
-                                return;
-                            }
-                            if(i == 0)
-                                return;
-                            i--;
-                        }
-                    }
-
+                    decrease--;
                 }
+
             }
         }
 
 
     }
-
-
 
 
 }

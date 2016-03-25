@@ -19,6 +19,11 @@ import javax.swing.border.Border;
 public class GamePlayView extends JFrame{
 
     GameOptionView previousWindow;
+    GameBoard gameBoard;
+
+    int clickCount = 0;
+    boolean isRed;
+
     public GamePlayView(GameOptionView previousWindow){
         this.previousWindow = previousWindow;
         this.setSize(600,600);
@@ -31,7 +36,7 @@ public class GamePlayView extends JFrame{
         IconPanel gameIcon = new IconPanel();
         PlayerPanel player1 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player1));
         PlayerPanel player2 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player2));
-        GameBoard gameBoard = new GameBoard();
+        gameBoard = new GameBoard();
 
 
         this.add(gameIcon);
@@ -113,6 +118,7 @@ public class GamePlayView extends JFrame{
      */
     private class GameBoard extends JPanel{
 
+        ListenForButton listenForButton;
         ChipButton[][] slots;
         public GameBoard(){
             int rows = previousWindow.getRows();
@@ -123,13 +129,13 @@ public class GamePlayView extends JFrame{
             this.setBorder(BorderFactory.createMatteBorder(10,10,0,0, new Color(0, 0, 128)));
 
             slots = new ChipButton[rows][rows];
-            ListenForButton listenForButton = new ListenForButton();
+            listenForButton = new ListenForButton();
             for(int row = 0; row < rows; row++)
             {
                 for(int column = 0; column < rows; column++)
                 {
                     slots[row][column] =  new ChipButton();
-                    JButton button = slots[row][column];
+                    ChipButton button = slots[row][column];
                     button.addActionListener(listenForButton);
                     this.add(button);
 
@@ -143,6 +149,7 @@ public class GamePlayView extends JFrame{
          */
         private class ChipButton extends JButton{
             public boolean isColored = false;
+            public Color chipColor = null;
             public ChipButton(){
 
                 //Creates a button that is perfectly round
@@ -151,28 +158,34 @@ public class GamePlayView extends JFrame{
                 this.setBorderPainted(false);
                 this.setContentAreaFilled(false);
                 this.setPreferredSize(size);
-
-
+                UIManager.put("Button.disabledForeground", Color.RED);
 
 
             }
+
+            public void setChipColor(Color color){
+                chipColor = color;
+            }
+
+
 
             protected void paintComponent(Graphics g) {
                 if(!isColored) {
                     g.setColor(Color.white);
-                    g.fillOval(0, 0, getSize().width - 10, getSize().height - 10);
-                    super.paintComponent(g);
+                } else {
+                    g.setColor(this.chipColor);
                 }
-                else{
-                    g.setColor(this.getGraphics().getColor());
-                    g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
-                }
+                g.fillOval(0, 0, getSize().width - 10, getSize().height - 10);
+                super.paintComponent(g);
+
             }
 
             // Paint the border of the button using a simple stroke.
             protected void paintBorder(Graphics g) {
-                g.setColor(getForeground());
-                g.drawOval(0, 0, getSize().width-10, getSize().height-10);
+                if(!isColored) {
+                    g.setColor(getForeground());
+                    g.drawOval(0, 0, getSize().width - 10, getSize().height - 10);
+                }
             }
 
             //This will color the slot yellow resembling the appropriate player's chip
@@ -180,6 +193,7 @@ public class GamePlayView extends JFrame{
                 Graphics g = this.getGraphics();
                 g.setColor(Color.YELLOW);
                 g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                this.setChipColor(Color.YELLOW);
                 this.isColored = true;
             }
 
@@ -188,12 +202,15 @@ public class GamePlayView extends JFrame{
                 Graphics g = this.getGraphics();
                 g.setColor(Color.RED);
                 g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                this.setChipColor(Color.RED);
                 this.isColored = true;
             }
 
 
 
         }
+
+
 
         private class ListenForButton implements ActionListener {
 
@@ -215,27 +232,79 @@ public class GamePlayView extends JFrame{
                 }
 
                 for(int i = rowIndex; i < slots.length; i++){
+                    boolean isPlayer1 = true;
+                    boolean isPlayer1Red = true;
+                    if(!previousWindow.getPlayer1Color().equals("Red")){
+                        isPlayer1Red = false;
+                    }
+                    if(clickCount%2 != 0){
+                        isPlayer1 = false;
+                    }
+
+                    if(isPlayer1 && !isPlayer1Red)
+                        isRed = false;
+                    else if(!isPlayer1 && isPlayer1Red)
+                        isRed = false;
+                    else
+                        isRed = true;
+
+
 
                     if(i == slots.length - 1){
                         ChipButton temp = slots[i][columnIndex];
-                        temp.recolorRed();
-                        return;
+                        if(!temp.isColored) {
+                            if (isRed) {
+                                temp.recolorRed();
+                            } else {
+                                temp.recolorYellow();
+                            }
+                            temp.removeActionListener(listenForButton);
+                            temp.removeMouseListener(temp.getMouseListeners()[0]);
+                            clickCount++;
+                            return;
+                        }
                     }
-                    else if(slots[i+1][columnIndex].isColored == true){
+                    else if(slots[i+1][columnIndex].isColored){
                         ChipButton temp = slots[i][columnIndex];
-                        temp.recolorRed();
-                        return;
+                        if(!temp.isColored) {
+                            if (isRed) {
+                                temp.recolorRed();
+                            } else {
+                                temp.recolorYellow();
+                            }
+                            clickCount++;
+                            return;
+                        }
                     }
-                    else if(slots[slots.length-1][columnIndex].isColored == false){
+                    else if(!slots[slots.length-1][columnIndex].isColored){
                         ChipButton temp = slots[slots.length-1][columnIndex];
-                        temp.recolorRed();
+                        if(isRed){
+                            temp.recolorRed();
+                        }
+                        else {
+                            temp.recolorYellow();
+                        }
+                        clickCount++;
                         return;
 
                     }
-                    else if(slots[i][columnIndex].isColored != false){
+                    else if(slots[i][columnIndex].isColored){
                         ChipButton temp = slots[i - 1][columnIndex];
-                        temp.recolorRed();
-                        return;
+                        while(i < 0){
+                            temp = slots[i-1][columnIndex];
+                            if(!temp.isColored){
+                                if (isRed) {
+                                    temp.recolorRed();
+                                } else {
+                                    temp.recolorYellow();
+                                }
+                                clickCount++;
+                                return;
+                            }
+                            if(i == 0)
+                                return;
+                            i--;
+                        }
                     }
 
                 }

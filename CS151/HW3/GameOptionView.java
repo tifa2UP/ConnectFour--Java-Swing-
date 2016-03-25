@@ -19,6 +19,7 @@ public class GameOptionView extends JFrame{
     PlayerPanel player2;
     GridNumber gridNumber;
     ConnectionsToWin connectionsToWin;
+    JButton startButton;
 
     public GameOptionView(){
         this.setSize(600,600);
@@ -79,12 +80,8 @@ public class GameOptionView extends JFrame{
 
     }
 
-    public String getPlayer1Name(){
-        return player1.getPlayerName();
-    }
-
-    public String getPlayer2Name(){
-        return player2.getPlayerName();
+    public String getPlayerName(PlayerPanel p){
+        return p.getPlayerName();
     }
 
     public int getRows(){
@@ -102,6 +99,15 @@ public class GameOptionView extends JFrame{
     public String getPlayer2Color(){
         return player2.getColor();
     }
+
+    public void setRows(String number) { gridNumber.setRows(number);}
+
+    public void setConnections(String number) { connectionsToWin.setConnections(number);}
+
+    public void setPlayerName(PlayerPanel p, String name){
+        p.setPlayerName(name);
+    }
+
 
     /**
      * This is an inner class resembling the JPanel that contains the game's icon.
@@ -281,7 +287,7 @@ public class GameOptionView extends JFrame{
      * This class contains the button that will be responsible for starting the game
      */
     private class ButtonPanel extends JPanel{
-        JButton startButton;
+
         public ButtonPanel(){
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
@@ -306,59 +312,7 @@ public class GameOptionView extends JFrame{
         private class ListenForButton implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
-                //Tries the entire block of code for any exceptions
-                try {
-                    int rows = gridNumber.getRows();
-                    int numConnectionsToWin = connectionsToWin.getConnections();
-                    if (e.getSource() == startButton) {
-
-                        if (rows != 7) {
-                            //Rows cannot be larger than 15
-                            if (rows > 15) {
-                                JOptionPane tooLarge = new JOptionPane();
-                                tooLarge.showMessageDialog(GameOptionView.this, "Please set the rows to a whole number between 2 and 15.", "Rows too large", JOptionPane.ERROR_MESSAGE);
-                                return;
-                            }
-                            //Rows cannot be set to zero
-                            if (rows < 2) {
-                                JOptionPane tooLarge = new JOptionPane();
-                                tooLarge.showMessageDialog(GameOptionView.this, "Please set the rows to a whole number between 2 and 15.", "Can't Be Zero", JOptionPane.ERROR_MESSAGE);
-                                return;
-                            }
-
-                            gridNumber.setRows("" + rows);
-                        }
-
-                        if (numConnectionsToWin > rows) {
-                            JOptionPane connectionsLargerThanRows = new JOptionPane();
-                            connectionsLargerThanRows.showMessageDialog(GameOptionView.this, "The connection length must be less than or equal to the number of rows/columns",
-                                    "Connections larger than Rows", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                        if (numConnectionsToWin < 2) {
-                            JOptionPane tooLarge = new JOptionPane();
-                            tooLarge.showMessageDialog(GameOptionView.this, "The connection length must be greater than 1", "Can't Be Zero", JOptionPane.ERROR_MESSAGE);
-                            return;
-                        }
-                            connectionsToWin.setConnections("" + numConnectionsToWin);
-
-                        if (!player1.getPlayerName().equals("Player 1"))
-                            player1.setPlayerName(player1.getPlayerName());
-                        if (!player2.getPlayerName().equals("Player 2"))
-                            player2.setPlayerName(player2.getPlayerName());
-
-
-                        //Upon the button being clicked, the frame will switch to that of the game.
-                        GameOptionView.this.setVisible(false);
-                        new GamePlayView(GameOptionView.this);
-
-                    }
-                } catch(NumberFormatException nFE)
-                {
-                    JOptionPane tooLarge = new JOptionPane();
-                    tooLarge.showMessageDialog(GameOptionView.this, "Please set the rows to a whole number between 2 and 15\nand make sure the connections are less than or equal to\nthe rows.", "Input Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+                new GameViewController(GameOptionView.this).actionPerformedHelper(e);
             }
         }
 

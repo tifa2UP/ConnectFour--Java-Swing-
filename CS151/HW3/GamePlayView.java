@@ -27,8 +27,8 @@ public class GamePlayView extends JFrame{
         this.setLayout(null);
 
         IconPanel gameIcon = new IconPanel();
-        PlayerPanel player1 = new PlayerPanel(previousWindow.getPlayer1Name());
-        PlayerPanel player2 = new PlayerPanel(previousWindow.getPlayer2Name());
+        PlayerPanel player1 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player1));
+        PlayerPanel player2 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player2));
         GameBoard gameBoard = new GameBoard();
 
 
@@ -92,7 +92,7 @@ public class GamePlayView extends JFrame{
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel nameLabel = new JLabel(name);
             JLabel turn = new JLabel();
-            if(name.equals(previousWindow.getPlayer1Name()))
+            if(name.equals(previousWindow.getPlayerName(previousWindow.player1)))
                 turn.setText("Your Turn!");
             nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
             turn.setAlignmentX(Component.CENTER_ALIGNMENT);

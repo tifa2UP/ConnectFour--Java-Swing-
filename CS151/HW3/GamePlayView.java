@@ -1,6 +1,8 @@
 package CS151.HW3;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -111,6 +113,7 @@ public class GamePlayView extends JFrame{
      */
     private class GameBoard extends JPanel{
 
+        ChipButton[][] slots;
         public GameBoard(){
             int rows = previousWindow.getRows();
             this.setMaximumSize(new Dimension(325,325));
@@ -119,13 +122,15 @@ public class GamePlayView extends JFrame{
             this.setLayout(new GridLayout(rows,rows));
             this.setBorder(BorderFactory.createMatteBorder(10,10,0,0, new Color(0, 0, 128)));
 
-            JButton[][] slots = new JButton[rows][rows];
+            slots = new ChipButton[rows][rows];
+            ListenForButton listenForButton = new ListenForButton();
             for(int row = 0; row < rows; row++)
             {
                 for(int column = 0; column < rows; column++)
                 {
                     slots[row][column] =  new ChipButton();
                     JButton button = slots[row][column];
+                    button.addActionListener(listenForButton);
                     this.add(button);
 
 
@@ -137,23 +142,31 @@ public class GamePlayView extends JFrame{
          * These represent the slots in the gameboard, once clicked they will drop a chip into the column
          */
         private class ChipButton extends JButton{
+            public boolean isColored = false;
             public ChipButton(){
+
                 //Creates a button that is perfectly round
                 Dimension size = this.getPreferredSize();
                 size.width = size.height = Math.max(size.width, size.height);
                 this.setBorderPainted(false);
                 this.setContentAreaFilled(false);
                 this.setPreferredSize(size);
-                this.setContentAreaFilled(false);
+
+
 
 
             }
 
             protected void paintComponent(Graphics g) {
-
-                g.setColor(Color.white);
-                g.fillOval(0, 0, getSize().width-10, getSize().height-10);
-                super.paintComponent(g);
+                if(!isColored) {
+                    g.setColor(Color.white);
+                    g.fillOval(0, 0, getSize().width - 10, getSize().height - 10);
+                    super.paintComponent(g);
+                }
+                else{
+                    g.setColor(this.getGraphics().getColor());
+                    g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                }
             }
 
             // Paint the border of the button using a simple stroke.
@@ -162,6 +175,71 @@ public class GamePlayView extends JFrame{
                 g.drawOval(0, 0, getSize().width-10, getSize().height-10);
             }
 
+            //This will color the slot yellow resembling the appropriate player's chip
+            public void recolorYellow(){
+                Graphics g = this.getGraphics();
+                g.setColor(Color.YELLOW);
+                g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                this.isColored = true;
+            }
+
+            //This will color the slot red resembling the appropriate player's chip
+            public void recolorRed(){
+                Graphics g = this.getGraphics();
+                g.setColor(Color.RED);
+                g.fillOval(0, 0, this.getSize().width-10, this.getSize().height-10);
+                this.isColored = true;
+            }
+
+
+
+        }
+
+        private class ListenForButton implements ActionListener {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int rowIndex = 0;
+                int columnIndex = 0;
+                outerloop:
+                for(int i = 0; i < slots.length; i++){
+                    for(int j = 0; j < slots.length; j++){
+                        if(e.getSource() == slots[i][j]){
+                            rowIndex = i;
+                            columnIndex = j;
+                            break outerloop;
+                        }
+
+                    }
+
+                }
+
+                for(int i = rowIndex; i < slots.length; i++){
+
+                    if(i == slots.length - 1){
+                        ChipButton temp = slots[i][columnIndex];
+                        temp.recolorRed();
+                        return;
+                    }
+                    else if(slots[i+1][columnIndex].isColored == true){
+                        ChipButton temp = slots[i][columnIndex];
+                        temp.recolorRed();
+                        return;
+                    }
+                    else if(slots[slots.length-1][columnIndex].isColored == false){
+                        ChipButton temp = slots[slots.length-1][columnIndex];
+                        temp.recolorRed();
+                        return;
+
+                    }
+                    else if(slots[i][columnIndex].isColored != false){
+                        ChipButton temp = slots[i - 1][columnIndex];
+                        temp.recolorRed();
+                        return;
+                    }
+
+                }
+            }
         }
 
 

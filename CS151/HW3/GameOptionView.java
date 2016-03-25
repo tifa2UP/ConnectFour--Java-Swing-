@@ -150,7 +150,6 @@ public class GameOptionView extends JFrame{
             JLabel title = new JLabel("How many rows/columns?");
             gridField = new JTextField("7", 2);
 
-
             //Used to keep a small text field that is meant to hold 2 digits
             gridField.setMaximumSize(gridField.getPreferredSize());
 
@@ -160,13 +159,10 @@ public class GameOptionView extends JFrame{
             this.add(title);
             this.add(gridField);
             this.setSize(this.getPreferredSize());
-
         }
 
         public void setRows(String number){
             gridField.setText(number);
-
-
         }
 
         public int getRows(){
@@ -184,7 +180,6 @@ public class GameOptionView extends JFrame{
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
             JLabel title = new JLabel("How many connections to win?");
             connectionsField = new JTextField("4", 2);
-
 
             //Used to keep a small text field that is meant to hold 2 digits
             connectionsField.setMaximumSize(connectionsField.getPreferredSize());
@@ -234,8 +229,6 @@ public class GameOptionView extends JFrame{
             this.add(colorTitle);
             this.add(colorLabel);
             this.setSize(this.getPreferredSize());
-
-
         }
 
         public String getColor(){
@@ -316,9 +309,6 @@ public class GameOptionView extends JFrame{
             }
         }
 
-
     }
-
-
 
 }

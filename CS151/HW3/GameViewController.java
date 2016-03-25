@@ -50,13 +50,14 @@ public class GameViewController {
                     gameOptionView.setRows("" + rows);
                     numRows = rows;
                 }
-
+                //The connections cannot be greater than the rows, or else winning would be impossible
                 if (numConnectionsToWin > rows) {
                     JOptionPane connectionsLargerThanRows = new JOptionPane();
                     connectionsLargerThanRows.showMessageDialog(gameOptionView, "The connection length must be less than or equal to the number of rows/columns",
                             "Connections larger than Rows", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
+                //The connections cannot be less than two or else the first move in the game would win
                 if (numConnectionsToWin < 2) {
                     JOptionPane tooLarge = new JOptionPane();
                     tooLarge.showMessageDialog(gameOptionView, "The connection length must be greater than 1", "Can't Be Zero", JOptionPane.ERROR_MESSAGE);
@@ -65,14 +66,17 @@ public class GameViewController {
                 gameOptionView.setConnections("" + numConnectionsToWin);
                 this.numConnectionsToWin = numConnectionsToWin;
 
+                //If the default name for Player 1 has been changed, this will set the new name
                 if (!gameOptionView.getPlayerName(gameOptionView.player1).equals("Player 1")) {
                     gameOptionView.setPlayerName(gameOptionView.player1, gameOptionView.getPlayerName(gameOptionView.player1));
                     player1Name = gameOptionView.getPlayerName(gameOptionView.player1);
                 }
+                //If the default name for Player 2 has been changed, this will set the new name
                 if (!gameOptionView.getPlayerName(gameOptionView.player2).equals("Player 2")) {
                     gameOptionView.setPlayerName(gameOptionView.player2, gameOptionView.getPlayerName(gameOptionView.player2));
                     player2Name = gameOptionView.getPlayerName(gameOptionView.player2);
                 }
+                //Stores data of the players chip color
                 player1Color = gameOptionView.getPlayer1Color();
                 player2Color = gameOptionView.getPlayer2Color();
 

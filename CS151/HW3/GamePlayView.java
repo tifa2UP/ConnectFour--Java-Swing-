@@ -24,6 +24,9 @@ public class GamePlayView extends JFrame {
     PlayerPanel player2;
     ChipButton[][] slots;
     ChipButton temp;
+    JButton options;
+    private ListenForButton listenForButton = new ListenForButton();
+
 
 
     int clickCount = 0;
@@ -42,12 +45,16 @@ public class GamePlayView extends JFrame {
         player2 = new PlayerPanel(previousWindow.getPlayerName(previousWindow.player2));
         player2.setSize(player1.getSize());
         gameBoard = new GameBoard();
+        options = new JButton("<< Options");
+        options.addActionListener(listenForButton);
+        options.setSize(options.getPreferredSize());
 
 
         this.add(gameIcon);
         this.add(player1);
         this.add(player2);
         this.add(gameBoard);
+        this.add(options);
 
         //Compute hidden height and width of the frame
         int hiddenHeight = getInsets().top + getInsets().bottom;
@@ -61,6 +68,7 @@ public class GamePlayView extends JFrame {
         //Centers the gameboard in the middle of the screen
         gameBoard.setLocation((this.getWidth() - hiddenWidth - gameBoard.getWidth()) / 2, (this.getHeight() - hiddenHeight - gameBoard.getHeight()) / 2 + 50);
 
+        options.setLocation(hiddenWidth, hiddenHeight);
 
         this.setVisible(true);
     }
@@ -143,7 +151,6 @@ public class GamePlayView extends JFrame {
      */
     private class GameBoard extends JPanel {
 
-        ListenForButton listenForButton;
 
         public GameBoard() {
             int rows = previousWindow.getRows();
@@ -154,7 +161,6 @@ public class GamePlayView extends JFrame {
             this.setBorder(BorderFactory.createMatteBorder(10, 10, 0, 0, new Color(0, 0, 128)));
 
             slots = new ChipButton[rows][rows];
-            listenForButton = new ListenForButton();
             for (int row = 0; row < rows; row++) {
                 for (int column = 0; column < rows; column++) {
                     slots[row][column] = new ChipButton();
@@ -168,20 +174,24 @@ public class GamePlayView extends JFrame {
         }
 
 
+    }
 
-        /**
-         * This class comprehends whether a slot on a certain column was clicked,
-         * adds a chip to the lowest slot in the column
-         */
-        private class ListenForButton implements ActionListener {
+    /**
+     * This class comprehends whether a slot on a certain column was clicked,
+     * adds a chip to the lowest slot in the column
+     */
+    private class ListenForButton implements ActionListener {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource().getClass().equals(options.getClass())) {
+                GamePlayView.this.setVisible(false);
+                new GameOptionView();
+            }
+            else {
                 new GameViewController(GamePlayView.this).gamePlayActionHandler(e);
             }
         }
-
-
     }
 
     /**

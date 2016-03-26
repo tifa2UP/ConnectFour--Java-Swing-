@@ -22,9 +22,11 @@ public class GamePlayView extends JFrame {
     GameBoard gameBoard;
     PlayerPanel player1;
     PlayerPanel player2;
+    ChipButton[][] slots;
+    ChipButton temp;
+
 
     int clickCount = 0;
-    boolean isRed;
 
     public GamePlayView(GameOptionView previousWindow) {
         this.previousWindow = previousWindow;
@@ -142,7 +144,6 @@ public class GamePlayView extends JFrame {
     private class GameBoard extends JPanel {
 
         ListenForButton listenForButton;
-        ChipButton[][] slots;
 
         public GameBoard() {
             int rows = previousWindow.getRows();
@@ -166,71 +167,7 @@ public class GamePlayView extends JFrame {
             }
         }
 
-        /**
-         * These represent the slots in the gameboard, once clicked they will drop a chip into the column
-         */
-        private class ChipButton extends JButton {
-            public boolean isColored = false;
-            public Color chipColor = null;
 
-            public ChipButton() {
-
-                //Creates a button that is perfectly round
-                Dimension size = this.getPreferredSize();
-                size.width = size.height = Math.max(size.width, size.height);
-                this.setBorderPainted(false);
-                this.setContentAreaFilled(false);
-                this.setPreferredSize(size);
-                UIManager.put("Button.disabledForeground", Color.RED);
-
-
-            }
-
-            public void setChipColor(Color color) {
-                chipColor = color;
-            }
-
-
-            //This sets the slot color, if the slot is already colored it will maintain the color
-            protected void paintComponent(Graphics g) {
-                if (!isColored) {
-                    g.setColor(Color.white);
-                } else {
-                    g.setColor(this.chipColor);
-                }
-                g.fillOval(0, 0, getSize().width - 10, getSize().height - 10);
-                super.paintComponent(g);
-
-            }
-
-            // Paint the border of the button using a simple stroke.
-            protected void paintBorder(Graphics g) {
-                if (!isColored) {
-                    g.setColor(getForeground());
-                    g.drawOval(0, 0, getSize().width - 10, getSize().height - 10);
-                }
-            }
-
-            //This will color the slot yellow resembling the appropriate player's chip
-            public void recolorYellow() {
-                Graphics g = this.getGraphics();
-                g.setColor(Color.YELLOW);
-                g.fillOval(0, 0, this.getSize().width - 10, this.getSize().height - 10);
-                this.setChipColor(Color.YELLOW);
-                this.isColored = true;
-            }
-
-            //This will color the slot red resembling the appropriate player's chip
-            public void recolorRed() {
-                Graphics g = this.getGraphics();
-                g.setColor(Color.RED);
-                g.fillOval(0, 0, this.getSize().width - 10, this.getSize().height - 10);
-                this.setChipColor(Color.RED);
-                this.isColored = true;
-            }
-
-
-        }
 
         /**
          * This class comprehends whether a slot on a certain column was clicked,
@@ -240,58 +177,74 @@ public class GamePlayView extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                int columnIndex = 0;
-                boolean isPlayer1;
-                boolean isPlayer1Red = true;
-                if (!previousWindow.getPlayer1Color().equals("Red")) {
-                    isPlayer1Red = false;
-                }
-                if (clickCount % 2 != 0) {
-                    isPlayer1 = false;
-                    setTurn(1);
-                } else {
-                    isPlayer1 = true;
-                    setTurn(2);
-                }
-
-                outerloop:
-                for (int i = 0; i < slots.length; i++) {
-                    for (int j = 0; j < slots.length; j++) {
-                        if (e.getSource() == slots[i][j]) {
-                            columnIndex = j;
-                            break outerloop;
-                        }
-
-                    }
-
-                }
-
-                //These conditionals decide whether the chip needs to be red or not
-                if (isPlayer1 && !isPlayer1Red)
-                    isRed = false;
-                else if (!isPlayer1 && isPlayer1Red)
-                    isRed = false;
-                else
-                    isRed = true;
-
-                //Iterates from the bottom of the column, fills the lowest empty slot with the proper chip
-                ChipButton temp;
-                int decrease = slots.length;
-                while (decrease > 0) {
-                    temp = slots[decrease - 1][columnIndex];
-                    if (!temp.isColored) {
-                        if (isRed) {
-                            temp.recolorRed();
-                        } else {
-                            temp.recolorYellow();
-                        }
-                        clickCount++;
-                        return;
-                    }
-                    decrease--;
-                }
-
+                new GameViewController(GamePlayView.this).gamePlayActionHandler(e);
             }
+        }
+
+
+    }
+
+    /**
+     * These represent the slots in the gameboard, once clicked they will drop a chip into the column,
+     * the access hasn't been declared as private because the game view controller needs the ability to acces it.
+     */
+    class ChipButton extends JButton {
+        public boolean isColored = false;
+        public Color chipColor = null;
+
+        public ChipButton() {
+
+            //Creates a button that is perfectly round
+            Dimension size = this.getPreferredSize();
+            size.width = size.height = Math.max(size.width, size.height);
+            this.setBorderPainted(false);
+            this.setContentAreaFilled(false);
+            this.setPreferredSize(size);
+            UIManager.put("Button.disabledForeground", Color.RED);
+
+
+        }
+
+        public void setChipColor(Color color) {
+            chipColor = color;
+        }
+
+        //This sets the slot color, if the slot is already colored it will maintain the color
+        protected void paintComponent(Graphics g) {
+            if (!isColored) {
+                g.setColor(Color.white);
+            } else {
+                g.setColor(this.chipColor);
+            }
+            g.fillOval(0, 0, getSize().width - 10, getSize().height - 10);
+            super.paintComponent(g);
+
+        }
+
+        // Paint the border of the button using a simple stroke.
+        protected void paintBorder(Graphics g) {
+            if (!isColored) {
+                g.setColor(getForeground());
+                g.drawOval(0, 0, getSize().width - 10, getSize().height - 10);
+            }
+        }
+
+        //This will color the slot yellow resembling the appropriate player's chip
+        public void recolorYellow() {
+            Graphics g = this.getGraphics();
+            g.setColor(Color.YELLOW);
+            g.fillOval(0, 0, this.getSize().width - 10, this.getSize().height - 10);
+            this.setChipColor(Color.YELLOW);
+            this.isColored = true;
+        }
+
+        //This will color the slot red resembling the appropriate player's chip
+        public void recolorRed() {
+            Graphics g = this.getGraphics();
+            g.setColor(Color.RED);
+            g.fillOval(0, 0, this.getSize().width - 10, this.getSize().height - 10);
+            this.setChipColor(Color.RED);
+            this.isColored = true;
         }
 
 

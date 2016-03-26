@@ -305,7 +305,7 @@ public class GameOptionView extends JFrame{
         private class ListenForButton implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GameViewController(GameOptionView.this).actionPerformedHelper(e);
+                new GameViewController(GameOptionView.this).gameOptionActionHandler(e);
             }
         }
 

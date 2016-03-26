@@ -10,6 +10,7 @@ import java.awt.*;
 public class GameViewController {
 
     GameOptionView gameOptionView;
+    GamePlayView gamePlayView;
     private int numRows;
     private int numConnectionsToWin;
     private String player1Name;
@@ -17,8 +18,14 @@ public class GameViewController {
     private String player1Color;
     private String player2Color;
 
+    //Handles data when needed for the GameOptionView class
     public GameViewController(GameOptionView gameOptionView){
         this.gameOptionView = gameOptionView;
+    }
+
+    //Handles data when needed for the GameViewController class
+    public GameViewController(GamePlayView gamePlayView){
+        this.gamePlayView = gamePlayView;
     }
 
     public static void main(String[] args) {
@@ -26,7 +33,7 @@ public class GameViewController {
     }
 
     //When the start game button is clicked on the GameOptionView this code is executed handling the data
-    public void actionPerformedHelper(ActionEvent e){
+    public void gameOptionActionHandler(ActionEvent e){
         //Tries the entire block of code for any exceptions
         try {
             int rows = gameOptionView.getRows();
@@ -91,6 +98,60 @@ public class GameViewController {
             JOptionPane tooLarge = new JOptionPane();
             tooLarge.showMessageDialog(gameOptionView, "Please set the rows to a whole number between 2 and 15\nand make sure the connections are less than or equal to\nthe rows.", "Input Error", JOptionPane.ERROR_MESSAGE);
             return;
+        }
+    }
+    //This method is responsible for registering clicks on certain slots on the game board and dropping a chip to the lowest open spot
+    public void gamePlayActionHandler(ActionEvent e){
+        int columnIndex = 0;
+        boolean isPlayer1;
+        boolean isPlayer1Red = true;
+        boolean isRed;
+
+        if (!gamePlayView.previousWindow.getPlayer1Color().equals("Red")) {
+            isPlayer1Red = false;
+        }
+        if (gamePlayView.clickCount % 2 != 0) {
+            isPlayer1 = false;
+            gamePlayView.setTurn(1);
+        } else {
+            isPlayer1 = true;
+            gamePlayView.setTurn(2);
+        }
+
+        outerloop:
+        for (int i = 0; i < gamePlayView.slots.length; i++) {
+            for (int j = 0; j < gamePlayView.slots.length; j++) {
+                if (e.getSource() == gamePlayView.slots[i][j]) {
+                    columnIndex = j;
+                    break outerloop;
+                }
+
+            }
+
+        }
+
+        //These conditionals decide whether the chip needs to be red or not
+        if (isPlayer1 && !isPlayer1Red)
+            isRed = false;
+        else if (!isPlayer1 && isPlayer1Red)
+            isRed = false;
+        else
+            isRed = true;
+
+        //Iterates from the bottom of the column, fills the lowest empty slot with the proper chip
+        int decrease = gamePlayView.slots.length;
+        while (decrease > 0) {
+            gamePlayView.temp = gamePlayView.slots[decrease - 1][columnIndex];
+            if (!gamePlayView.temp.isColored) {
+                if (isRed) {
+                    gamePlayView.temp.recolorRed();
+                } else {
+                    gamePlayView.temp.recolorYellow();
+                }
+                gamePlayView.clickCount++;
+                return;
+            }
+            decrease--;
         }
     }
 }

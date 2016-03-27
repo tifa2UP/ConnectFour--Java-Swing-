@@ -54,8 +54,6 @@ public class GameView extends JFrame{
 		//Put the copyright text at the bottom of the window
 		textPanel.setLocation((this.getWidth() - hiddenWidth - textPanel.getWidth())/2, (this.getHeight() - hiddenHeight - textPanel.getHeight())/2 + this.getHeight()/3);
 
-
-
 		this.setVisible(true);
 	}
 

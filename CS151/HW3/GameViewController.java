@@ -6,6 +6,7 @@ import java.awt.*;
 
 /**
  * Created by Abdellatif on 3/19/2016.
+ * Implemented by Mohammad on 2/26/2016.
  */
 public class GameViewController {
 
@@ -110,7 +111,6 @@ public class GameViewController {
         {
             JOptionPane tooLarge = new JOptionPane();
             tooLarge.showMessageDialog(gameOptionView, "Please set the rows to a whole number between 2 and 15\nand make sure the connections are less than or equal to\nthe rows.", "Input Error", JOptionPane.ERROR_MESSAGE);
-            return;
         }
     }
     //This method is responsible for registering clicks on certain slots on the game board and dropping a chip to the lowest open spot

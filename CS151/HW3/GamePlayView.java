@@ -14,7 +14,7 @@ import javax.swing.border.Border;
 /**
  * This will be the user interface of the actual game displaying the connect four screen and allowing users to
  * drop chips into each column
- * Created by Momo on 3/21/16.
+ * Created by Mohammad on 3/21/16.
  */
 public class GamePlayView extends JFrame {
 

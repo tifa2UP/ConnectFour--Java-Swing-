@@ -263,7 +263,7 @@ public class GameOptionView extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource() == switchButton){
-                    if(player1.getColor() == "Red") {
+                    if(player1.getColor().equals("Red")) {
                         player1.setColorLabel("Yellow");
                         player2.setColorLabel("Red");
                     }

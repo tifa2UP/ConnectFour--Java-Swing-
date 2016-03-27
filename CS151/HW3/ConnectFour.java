@@ -149,6 +149,10 @@ public class ConnectFour {
      *
      */
     public void insertChip(int columnPosition, Player player) {
+        //throws an exception if the input is not valid
+        if (!isValidInput(columnPosition)){
+            throw new IndexOutOfBoundsException("" + columnPosition);
+        }
         //Create a new Chip that belongs a player
         Chip newChip = player.getChip();
         //insert a new chip a given column
@@ -157,6 +161,16 @@ public class ConnectFour {
         structure[columnPosition][(positionForInsert[columnPosition])] = newChip;
         //increment the position for insert at that given column
         positionForInsert[columnPosition] = positionForInsert[columnPosition] + 1;
+    }
+
+    private boolean isValidInput(int columnPosition){
+        if (columnPosition < 0 || columnPosition >= structure.length){
+            return false;
+        }
+        else if (positionForInsert[columnPosition] >= structure.length){
+            return false;
+        }
+        return true;
     }
 
 }

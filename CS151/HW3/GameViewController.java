@@ -9,14 +9,20 @@ import java.awt.*;
  */
 public class GameViewController {
 
-    GameOptionView gameOptionView;
-    GamePlayView gamePlayView;
-    private int numRows;
-    private int numConnectionsToWin;
-    private String player1Name;
-    private String player2Name;
-    private String player1Color;
-    private String player2Color;
+    private static GameOptionView gameOptionView;
+    private static GamePlayView gamePlayView;
+    private static int numRows = 7;
+    private static int numConnectionsToWin = 4;
+    private static String player1Name = "Player 1";
+    private static String player2Name = "Player 2";
+    private static String player1Color = "Red";
+    private static String player2Color = "Yellow";
+    private static ConnectFour connectFour;
+    private static Player player1;
+    private static Player player2;
+    private static Chip p1Chip;
+    private static Chip p2Chip;
+
 
     //Handles data when needed for the GameOptionView class
     public GameViewController(GameOptionView gameOptionView){
@@ -26,11 +32,18 @@ public class GameViewController {
     //Handles data when needed for the GameViewController class
     public GameViewController(GamePlayView gamePlayView){
         this.gamePlayView = gamePlayView;
+        p1Chip = new Chip(player1Color, 1);
+        p2Chip = new Chip(player2Color, 2);
+        player1 = new Player(player1Name, p1Chip);
+        player2 = new Player(player2Name, p2Chip);
+        connectFour = new ConnectFour(numRows, player1, player2, numConnectionsToWin);
+
     }
 
     public static void main(String[] args) {
         System.out.println("test me please");
     }
+
 
     //When the start game button is clicked on the GameOptionView this code is executed handling the data
     public void gameOptionActionHandler(ActionEvent e){
@@ -106,6 +119,7 @@ public class GameViewController {
         boolean isPlayer1;
         boolean isPlayer1Red = true;
         boolean isRed;
+        String[] buttons = {"Exit Game", "Options", "Rematch"};
 
         if (!gamePlayView.previousWindow.getPlayer1Color().equals("Red")) {
             isPlayer1Red = false;
@@ -139,15 +153,63 @@ public class GameViewController {
             isRed = true;
 
         //Iterates from the bottom of the column, fills the lowest empty slot with the proper chip
+        JOptionPane winner = new JOptionPane();
+        int res = -1;
+        boolean gameOver = false;
         int decrease = gamePlayView.slots.length;
         while (decrease > 0) {
             gamePlayView.temp = gamePlayView.slots[decrease - 1][columnIndex];
             if (!gamePlayView.temp.isColored) {
                 if (isRed) {
                     gamePlayView.temp.recolorRed();
+                    if(isPlayer1) {
+                        connectFour.insertChip(columnIndex, player1);
+                        if(connectFour.didWin(columnIndex, player1)){
+                            res = winner.showOptionDialog(gamePlayView, player1Name + " wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
+                            gameOver = true;
+                        }
+                        connectFour.printBoard();
+                    }
+                    else{
+                        connectFour.insertChip(columnIndex, player2);
+                        if(connectFour.didWin(columnIndex, player2)){
+                            res = winner.showOptionDialog(gamePlayView, player2Name + " wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
+                            gameOver = true;
+                        }
+                        connectFour.printBoard();
+
+                    }
                 } else {
                     gamePlayView.temp.recolorYellow();
+                    if(isPlayer1) {
+                        connectFour.insertChip(columnIndex, player1);
+                        if(connectFour.didWin(columnIndex, player1)){
+                            res = winner.showOptionDialog(gamePlayView, player1Name +" wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
+                            gameOver = true;
+                        }
+                        connectFour.printBoard();
+
+                    }
+                    else {
+                        connectFour.insertChip(columnIndex, player2);
+                        if(connectFour.didWin(columnIndex, player2)){
+                            res = winner.showOptionDialog(gamePlayView, player2Name +" wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
+                            gameOver = true;
+                        }
+                        connectFour.printBoard();
+
+                    }
                 }
+                if(res == 2) {
+                    gamePlayView = new GamePlayView(gamePlayView.previousWindow);
+                }
+                else if(res == 1) {
+                    gamePlayView.previousWindow.setVisible(true);
+                }
+                else if(res == 0 || gameOver)
+                    System.exit(0);
+
+
                 gamePlayView.clickCount++;
                 return;
             }

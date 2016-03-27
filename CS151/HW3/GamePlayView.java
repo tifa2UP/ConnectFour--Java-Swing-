@@ -26,6 +26,7 @@ public class GamePlayView extends JFrame {
     ChipButton temp;
     JButton options;
     private ListenForButton listenForButton = new ListenForButton();
+    GameViewController gameViewController = new GameViewController(GamePlayView.this);
 
 
 
@@ -186,10 +187,10 @@ public class GamePlayView extends JFrame {
         public void actionPerformed(ActionEvent e) {
             if(e.getSource().getClass().equals(options.getClass())) {
                 GamePlayView.this.setVisible(false);
-                new GameOptionView();
+                previousWindow.setVisible(true);
             }
             else {
-                new GameViewController(GamePlayView.this).gamePlayActionHandler(e);
+                gameViewController.gamePlayActionHandler(e);
             }
         }
     }

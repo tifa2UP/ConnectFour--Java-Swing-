@@ -36,9 +36,12 @@ public class ConnectFour {
 
     /**
      * checks whether there's a win condition
-     * @return true if one of the players win
+     * @param x the coloumn position of the insert
+     * @param player the player who inserted the chip
+     * @return true if one of the players wins
      */
-    public boolean didWin(int x, Chip chip) {
+    public boolean didWin(int x, Player player) {
+        Chip chip = player.getChip();
         int y = positionForInsert[x] - 1;
         int counter = 0;
         //check horizontally
@@ -146,6 +149,7 @@ public class ConnectFour {
     /**
      * inserts a chip at a given column
      * @param columnPosition the position the user is inserting the chip at
+     * @param player the player who's inserting the chip
      *
      */
     public void insertChip(int columnPosition, Player player) {
@@ -163,6 +167,11 @@ public class ConnectFour {
         positionForInsert[columnPosition] = positionForInsert[columnPosition] + 1;
     }
 
+    /**
+     * Checks whether a given input is a valid insert
+     * @param columnPosition the x position of the input
+     * @return true if the input is valid, and false if it results in an error
+     */
     private boolean isValidInput(int columnPosition){
         if (columnPosition < 0 || columnPosition >= structure.length){
             return false;

@@ -41,11 +41,6 @@ public class GameViewController {
 
     }
 
-    public static void main(String[] args) {
-        System.out.println("test me please");
-    }
-
-
     //When the start game button is clicked on the GameOptionView this code is executed handling the data
     public void gameOptionActionHandler(ActionEvent e){
         //Tries the entire block of code for any exceptions
@@ -168,7 +163,6 @@ public class GameViewController {
                             res = winner.showOptionDialog(gamePlayView, player1Name + " wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
                             gameOver = true;
                         }
-                        connectFour.printBoard();
                     }
                     else{
                         connectFour.insertChip(columnIndex, player2);
@@ -176,7 +170,6 @@ public class GameViewController {
                             res = winner.showOptionDialog(gamePlayView, player2Name + " wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
                             gameOver = true;
                         }
-                        connectFour.printBoard();
 
                     }
                 } else {
@@ -187,7 +180,6 @@ public class GameViewController {
                             res = winner.showOptionDialog(gamePlayView, player1Name +" wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
                             gameOver = true;
                         }
-                        connectFour.printBoard();
 
                     }
                     else {
@@ -196,7 +188,6 @@ public class GameViewController {
                             res = winner.showOptionDialog(gamePlayView, player2Name +" wins! What would you like to do?", "Winner", JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.PLAIN_MESSAGE, null, buttons, buttons[2]);
                             gameOver = true;
                         }
-                        connectFour.printBoard();
 
                     }
                 }

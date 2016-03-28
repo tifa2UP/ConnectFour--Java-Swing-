@@ -20,7 +20,6 @@ public class GameOptionView extends JFrame{
     GridNumber gridNumber;
     ConnectionsToWin connectionsToWin;
     JButton startButton;
-
     public GameOptionView(){
         this.setSize(600,600);
         this.setLocationRelativeTo(null);

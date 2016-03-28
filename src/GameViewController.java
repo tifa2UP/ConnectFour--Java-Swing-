@@ -1,5 +1,3 @@
-package CS151.HW3;
-
 import java.awt.event.ActionEvent;
 import javax.swing.*;
 import java.awt.*;

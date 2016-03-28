@@ -1,5 +1,3 @@
-package CS151.HW3;
-
 /**
  * Created by Abdellatif on 3/20/2016.
  * This class is created to test the Game through without the GUI
